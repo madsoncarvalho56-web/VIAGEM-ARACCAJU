@@ -1,6 +1,19 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0A6A39">
+<meta name="description" content="Roteiro e caderno de gastos da viagem Gonçalves/MG ↔ Aracaju/SE.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Aracaju">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Rumo a Aracaju</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;700;800;900&family=Overpass+Mono:wght@400;600&display=swap">
@@ -25,6 +38,10 @@
   --good:#5ECB8C; --bad:#F28B82; --focus:#F2B705; --field-line:#5F6E64; --info:#2C63BD; --asphalt:#262D28; --asphalt-fg:#EDEFEA; --asphalt-muted:#AEB7B0; --stripe:#D9A404; color-scheme:dark }
 
 *{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}
 html{font-size:112.5%}
 html[data-size="2"]{font-size:125%}
 html[data-size="3"]{font-size:140%}
@@ -194,6 +211,11 @@ textarea{width:100%;min-height:90px;font:400 1.05rem var(--body);padding:10px 12
 footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:6px}
 .mbar{display:none}
 .howto{gap:16px}
+.install{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;background:var(--surface-2);border-radius:10px;padding:12px 14px}
+.install img{border-radius:12px}
+.install p{font-size:.95rem}
+.btn{font:800 1.05rem var(--body);min-height:52px;padding:0 20px;border-radius:10px;border:0;background:var(--sign);color:var(--sign-fg);cursor:pointer}
+@media (max-width:560px){.install{grid-template-columns:48px 1fr}.install img{width:48px;height:48px}.install .btn{grid-column:1/-1}}
 .howto-list{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:8px;font-size:1.05rem}
 .sizectl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .sizectl .seg button{min-width:56px;font-weight:900}
@@ -281,6 +303,8 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
 @media (prefers-reduced-motion:no-preference){.real{transition:width .4s ease}}
 </style>
 
+</head>
+<body>
 <div class="wrap">
 
   <header class="sign" aria-label="Destinos da viagem">
@@ -306,11 +330,16 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
     <div class="sec-head"><h2 id="como-t">Como usar esta página</h2>
       <div class="sizectl" role="group" aria-label="Tamanho da letra"><span class="label">Tamanho da letra</span>
         <div class="seg"><button type="button" data-size="1" aria-label="Letra normal">A</button><button type="button" data-size="2" aria-label="Letra grande"><span style="font-size:1.2em">A</span></button><button type="button" data-size="3" aria-label="Letra muito grande"><span style="font-size:1.45em">A</span></button></div></div></div>
+    <div class="install" id="install-box">
+      <img src="icon-192.png" alt="" width="56" height="56">
+      <div><b>Instalar no celular</b><p class="muted" id="install-txt">Coloque este guia na tela inicial, com o ícone da placa verde, e use mesmo sem internet na estrada.</p></div>
+      <button type="button" class="btn" id="install-btn" hidden>Instalar</button>
+    </div>
     <ol class="howto-list">
       <li><b>Escolha Ida ou Volta</b> nos botões verdes mais abaixo.</li>
       <li><b>Ao passar por cada cidade</b>, toque em <b>“Passei aqui”</b>.</li>
       <li><b>Quando pagar algo</b>, escreva o valor no quadro <b>“Gastos do dia”</b>. Exemplo: 250 ou 250,50.</li>
-      <li>Tudo é <b>salvo sozinho</b>. Não precisa apertar nenhum botão de salvar.</li>
+      <li>Tudo é <b>salvo sozinho neste celular</b>. Não precisa apertar nenhum botão de salvar.</li>
     </ol>
   </section>
 
@@ -398,7 +427,7 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
 
   <footer>
     <p>Distâncias, tempos, diárias e refeições são estimativas. Pedágios: Motiva (Fernão Dias), Via Cristais (BR-040), Ecovias das Gerais (BR-251) e DNIT (BR-116/BA), conforme notícias de 2026. A estadia em Aracaju não entra nas contas.</p>
-    <p>O que você anota fica salvo nesta página e aparece em qualquer aparelho em que você abrir o link.</p>
+    <p>O que você anota fica guardado só neste celular. Se apagar os dados do navegador, as anotações somem.</p>
   </footer>
 </div>
 
@@ -640,8 +669,7 @@ async function flush(){
   else{setSync('off','Sem internet: salvo neste celular');timer=setTimeout(flush,5000)}
 }
 function schedule(){cancelAnimationFrame(rafId);rafId=requestAnimationFrame(recompute)}
-function changed(){saveLocal();setDirty(true);schedule();clearTimeout(timer);
-  if(ref){setSync('wait','Salvando…');timer=setTimeout(flush,900)}else setSync('off','Salvo neste celular')}
+function changed(){saveLocal();schedule();setSync('ok','Salvo neste celular')}
 document.addEventListener('input',e=>{const t=e.target;
   if(t.dataset.k){const x=parse(t.value);if(isFinite(x))state.v[t.dataset.k]=x;else delete state.v[t.dataset.k];changed()}
   else if(t.dataset.n!==undefined){state.n[t.dataset.n]=t.value;changed()}});
@@ -657,25 +685,21 @@ let sz='1';try{sz=localStorage.getItem('rumo-aracaju-letra')||'1'}catch(e){}
 setSize(['1','2','3'].includes(sz)?sz:'1');
 setLeg(ui.leg);fillInputs();recompute();
 
-(async()=>{
-  let cloud=false;
-  const loadTimer=setTimeout(()=>{if(!cloud)setSync('off','Sem internet: salvo neste celular')},10000);
-  let db=null;try{db=window.claude&&await window.claude.use('db')}catch(e){db=null}
-  if(!db){clearTimeout(loadTimer);setSync('off','Salvo neste celular');return}
-  ref=db.doc('viagem/ida');
-  let first=true;
-  ref.onSnapshot(snap=>{
-    if(snap.metadata.hasPendingWrites)return;
-    if(!snap.metadata.fromCache){clearTimeout(loadTimer);cloud=true}
-    if(first&&!snap.metadata.fromCache&&isDirty()){flush()}
-    else if(snap.exists){if(!timer&&!writing&&!isDirty()){state=normalize(snap.data());saveLocal();fillInputs();recompute();setSync('ok','Tudo salvo')}}
-    else if(first&&!snap.metadata.fromCache){
-      const has=Object.keys(state.v).length||Object.keys(state.c).length||Object.keys(state.n).length;
-      if(has)flush();else setSync('ok','Pronto para anotar')}
-    if(!snap.metadata.fromCache)first=false;
-  },()=>{clearTimeout(loadTimer);ref=null;setSync('off','Salvo neste celular')});
-})();
+setSync('ok','Salvo neste celular');
+
+/* Instalação como app */
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+const ib=$('install-btn'),it=$('install-txt'),box=$('install-box');
+const standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+let deferred=null;
+if(standalone){box.hidden=true}
+else if(/iphone|ipad|ipod/i.test(navigator.userAgent)){it.textContent='No iPhone: toque no botão Compartilhar (quadrado com seta) e depois em “Adicionar à Tela de Início”.'}
+else{it.textContent='Toque em Instalar. Se o botão não aparecer, abra o menu ⋮ do Chrome e escolha “Instalar app” ou “Adicionar à tela inicial”.'}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;ib.hidden=false});
+ib.addEventListener('click',async()=>{if(!deferred)return;deferred.prompt();try{await deferred.userChoice}catch(e){}deferred=null;ib.hidden=true});
+window.addEventListener('appinstalled',()=>{box.hidden=true});
 })();
 </script>
-
-</body></html>
+</body>
+</html>
