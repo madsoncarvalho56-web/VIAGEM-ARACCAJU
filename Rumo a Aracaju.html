@@ -1,0 +1,681 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Rumo a Aracaju</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;700;800;900&family=Overpass+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: sinalização rodoviária brasileira — placa verde de destino (ida e volta), painel da viagem inteira, abas Ida/Volta com a faixa da estrada e um trecho por dia (marcos de km + caderno de gastos), placas amarelas de advertência */
+:root{
+  --bg:#F1F4EF; --surface:#FFFFFF; --surface-2:#E7ECE6; --fg:#18211C; --muted:#3F4C44; --line:#D2DAD3;
+  --sign:#0A6A39; --sign-deep:#07552D; --sign-fg:#FFFFFF;
+  --warn:#F2B705; --warn-fg:#1E1A06;
+  --good:#1D7A47; --bad:#B3261E; --focus:#18211C; --field-line:#8A968E; --info:#1F4E9A; --asphalt:#2B312D; --asphalt-fg:#EDEFEA; --asphalt-muted:#B9C1BB; --stripe:#F2B705;
+  --display:"Overpass","Arial Narrow",Arial,sans-serif;
+  --body:"Overpass",Arial,sans-serif;
+  --mono:"Overpass Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111613; --surface:#19201B; --surface-2:#212923; --fg:#E5ECE7; --muted:#BCC8C0; --line:#2D3730;
+  --sign:#0D7A42; --sign-deep:#095C32; --sign-fg:#FFFFFF; --warn:#F2B705; --warn-fg:#1E1A06;
+  --good:#5ECB8C; --bad:#F28B82; --focus:#F2B705; --field-line:#5F6E64; --info:#2C63BD; --asphalt:#262D28; --asphalt-fg:#EDEFEA; --asphalt-muted:#AEB7B0; --stripe:#D9A404; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#111613; --surface:#19201B; --surface-2:#212923; --fg:#E5ECE7; --muted:#BCC8C0; --line:#2D3730;
+  --sign:#0D7A42; --sign-deep:#095C32; --sign-fg:#FFFFFF; --warn:#F2B705; --warn-fg:#1E1A06;
+  --good:#5ECB8C; --bad:#F28B82; --focus:#F2B705; --field-line:#5F6E64; --info:#2C63BD; --asphalt:#262D28; --asphalt-fg:#EDEFEA; --asphalt-muted:#AEB7B0; --stripe:#D9A404; color-scheme:dark }
+
+*{box-sizing:border-box}
+html{font-size:112.5%}
+html[data-size="2"]{font-size:125%}
+html[data-size="3"]{font-size:140%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:1rem;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:36px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+h2{font-size:1.6rem;font-weight:900;letter-spacing:-.01em}
+h3{font-size:1.1rem;font-weight:800}
+p{margin:0}
+.muted{color:var(--muted)}
+.small{font-size:.95rem}
+.label{font-family:var(--body);font-size:.95rem;font-weight:700;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+section{display:flex;flex-direction:column;gap:16px}
+.sec-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px}
+:focus-visible{outline:4px solid var(--focus);outline-offset:3px}
+.mbar :focus-visible{outline-color:var(--sign-fg)}
+[hidden]{display:none!important}
+
+/* Placa de destino */
+.sign{background:var(--sign);color:var(--sign-fg);border-radius:14px;padding:6px;box-shadow:0 2px 0 var(--sign-deep)}
+.sign-in{border:3px solid var(--sign-fg);border-radius:10px;padding:22px 22px 20px;display:flex;flex-direction:column;gap:16px}
+.dest{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 24px}
+.dest h1{font-size:clamp(2.6rem,9vw,5rem);font-weight:900;letter-spacing:.01em;text-transform:uppercase}
+.dest .km{font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,5vw,2.6rem);white-space:nowrap}
+.arrow{display:inline-block;width:.9em;height:.9em;vertical-align:-.05em;margin-right:.2em}
+.dest-2{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 16px;border-top:2px solid var(--sign-fg);padding-top:12px;font-family:var(--display)}
+.dest-2 b{font-size:clamp(1.2rem,4vw,1.7rem);font-weight:800;text-transform:uppercase}
+.dest-2 span{font-weight:800;font-size:clamp(1.05rem,3.4vw,1.4rem);white-space:nowrap}
+.sign-sub{display:flex;flex-wrap:wrap;gap:8px 18px;font-weight:600;opacity:.95}
+.shields{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.shield{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;min-width:46px;height:50px;padding:4px 6px 8px;
+  background:#FFFFFF;color:#111111;border:2.5px solid #111111;border-radius:6px 6px 45% 45% / 6px 6px 28% 28%;font-family:var(--display);line-height:1}
+.shield small{font-size:.55rem;font-weight:800;letter-spacing:.06em}
+.shield b{font-size:1.05rem;font-weight:900}
+.shield.sm{min-width:36px;height:38px;padding:3px 4px 6px;border-width:2px}
+.shield.sm b{font-size:.82rem}.shield.sm small{font-size:.46rem}
+.chev{opacity:.8;font-weight:900}
+
+/* Painel */
+.panel{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.big{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.big div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.big strong{font-family:var(--display);font-weight:900;font-size:1.45rem;line-height:1.1}
+.big .sub{font-size:.9rem;color:var(--muted)}
+.legs-tbl{width:100%;border-collapse:collapse;font-size:1rem}
+.legs-tbl th{font-family:var(--body);font-size:.9rem;color:var(--muted);font-weight:600;text-align:right;padding:0 0 6px}
+.legs-tbl th:first-child,.legs-tbl td:first-child{text-align:left}
+.legs-tbl td{padding:7px 0;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.legs-tbl tr.tot td{font-weight:800;border-top:2px solid var(--fg)}
+.pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-weight:700;font-size:.95rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface-2);color:var(--muted)}
+.pill i{width:12px;height:12px;border-radius:50%;background:var(--muted)}
+.pill.ok i{background:var(--good)}.pill.wait i{background:var(--warn)}.pill.off i{background:var(--bad)}
+.scen{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;justify-self:start}
+.seg button{font:700 1rem var(--body);padding:10px 16px;min-height:48px;border:0;background:var(--surface);color:var(--fg);cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--sign);color:var(--sign-fg)}
+.bars{display:flex;flex-direction:column;gap:12px}
+.bar-row{display:grid;grid-template-columns:7.5em 1fr auto;align-items:center;gap:10px;font-size:1rem}
+.bar{position:relative;height:16px;background:var(--surface-2);border-radius:6px;overflow:hidden}
+.bar .est{position:absolute;inset:0 auto 0 0;background:transparent;box-shadow:inset 0 0 0 1.5px var(--sign);border-radius:6px}
+.bar .real{position:absolute;inset:3px auto 3px 0;background:var(--sign);border-radius:4px}
+.bar .real.over{background:var(--bad)}
+.bar-row .v{font-family:var(--mono);font-size:.9rem;color:var(--muted);white-space:nowrap}
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:.9rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:8px;border-radius:3px;display:inline-block}
+.sw-est{box-shadow:inset 0 0 0 1.5px var(--sign)}.sw-real{background:var(--sign)}.sw-over{background:var(--bad)}
+
+/* Abas Ida/Volta */
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tab{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px 16px;min-height:64px;border-radius:10px;border:2px solid var(--field-line);background:var(--surface);color:var(--fg);cursor:pointer;text-align:left;font:inherit}
+.tab b{font:900 1.35rem var(--display)}
+.tab span{font-size:.95rem;color:var(--muted)}
+.tab[aria-selected="true"]{background:var(--sign);border-color:var(--sign);color:var(--sign-fg)}
+.tab[aria-selected="true"] span{color:var(--sign-fg);opacity:.9}
+
+/* Faixa da estrada */
+.road{background:var(--asphalt);border:1px solid var(--line);border-radius:12px;padding:18px 16px 14px;color:var(--asphalt-fg)}
+.road-track{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.road-track::before{content:"";position:absolute;left:12.5%;right:12.5%;top:9px;height:4px;
+  background:repeating-linear-gradient(90deg,var(--stripe) 0 16px,transparent 16px 26px)}
+.stop{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;min-width:0}
+.dot{width:22px;height:22px;border-radius:50%;background:var(--asphalt-fg);border:4px solid var(--asphalt);box-shadow:0 0 0 2px var(--stripe);z-index:1}
+.stop.end .dot{background:var(--stripe)}
+.stop b{font-family:var(--display);font-size:.95rem;font-weight:800;line-height:1.15}
+.stop .where{font-family:var(--mono);font-size:.85rem;color:var(--asphalt-muted)}
+.mleg{display:none}
+.legs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 12.5% 0}
+.leg{text-align:center;font-family:var(--mono);font-size:.85rem;color:var(--asphalt-muted);border-top:1px dashed color-mix(in srgb,var(--asphalt-fg) 30%,transparent);padding-top:6px}
+.leg b{display:block;color:var(--asphalt-fg);font-family:var(--display);font-size:.95rem}
+
+/* Dias */
+.leg-wrap{display:flex;flex-direction:column;gap:36px}
+.day{display:flex;flex-direction:column;gap:14px}
+.day-sign{background:var(--sign);color:var(--sign-fg);border-radius:10px;padding:4px}
+.day-sign>div{border:2px solid var(--sign-fg);border-radius:7px;padding:12px 14px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px}
+.day-sign h2{font-size:1.35rem}
+.day-sign .tag{font-family:var(--body);font-size:.95rem;background:transparent;color:var(--sign-fg);border:2px solid var(--sign-fg);padding:1px 8px;border-radius:4px;font-weight:800;white-space:nowrap}
+.day-meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--body);font-weight:700;font-size:1rem}
+.day-body{display:grid;grid-template-columns:1.45fr 1fr;gap:16px;align-items:start}
+.steps{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.step{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:12px 14px;border-top:1px solid var(--line)}
+.step:first-child{border-top:0}
+.step.done{background:color-mix(in srgb,var(--good) 9%,var(--surface))}
+.done-badge{display:none;font-weight:800;color:var(--good)}
+.step.done .done-badge{display:inline}
+.marco{display:flex;justify-content:center}
+.post{width:56px;border:2px solid var(--fg);border-radius:4px 4px 0 0;text-align:center;font-family:var(--mono);font-weight:600;font-size:.95rem;padding:2px 0;background:var(--surface);align-self:flex-start}
+.post small{display:block;font-size:.7rem;color:var(--muted);letter-spacing:.06em}
+.step-main{display:flex;flex-direction:column;gap:6px;min-width:0}
+.route{font-weight:800;font-size:1.08rem;line-height:1.35}
+.route .to{color:var(--muted);font-weight:600}
+.step-tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{font-size:.9rem;font-weight:700;padding:3px 10px;border-radius:4px;background:var(--surface-2);color:var(--fg);border:1px solid var(--line)}
+.chip.key{background:var(--sign);color:var(--sign-fg);border-color:var(--sign)}
+.chip.fuel{background:var(--warn);color:var(--warn-fg);border-color:var(--warn)}
+.obs{font-size:1rem;color:var(--muted)}
+label.chk{display:inline-flex;align-items:center;gap:10px;font-size:1rem;font-weight:700;color:var(--fg);cursor:pointer;border:2px solid var(--field-line);border-radius:8px;min-height:48px;padding:0 14px}
+label.chk input{width:26px;height:26px;accent-color:var(--sign);margin:0}
+label.chk:has(input:checked){border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+
+.ledger{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+.ledger table{width:100%;border-collapse:collapse;font-size:1rem}
+.ledger th{font-family:var(--body);font-size:.9rem;color:var(--muted);font-weight:600;text-align:left;padding:0 0 6px}
+.ledger th:not(:first-child),.ledger td:not(:first-child){text-align:right}
+.ledger td{padding:8px 0;border-top:1px solid var(--line);vertical-align:middle}
+.ledger td.est{font-family:var(--mono);font-size:.85rem;color:var(--muted);white-space:nowrap;padding-right:8px}
+.ledger tfoot td{font-weight:800;border-top:2px solid var(--fg)}
+.money{width:7.5em;max-width:100%;font:700 1.1rem var(--mono);text-align:right;padding:8px 10px;min-height:52px;border:2px solid var(--field-line);border-radius:6px;background:var(--bg);color:var(--fg)}
+.money::placeholder{color:var(--muted)}
+.odo{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:end}
+.odo label{display:flex;flex-direction:column;gap:4px;font-size:.9rem;font-weight:700;color:var(--muted);min-width:0}
+.odo input{width:100%}
+.consumo{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:1rem;background:var(--surface-2);border-radius:6px;padding:8px 10px}
+.consumo b{font-family:var(--mono)}
+.diff{font-family:var(--body);font-weight:800;font-size:.95rem;color:var(--muted)}
+.diff.up{color:var(--bad)}.diff.down{color:var(--good)}
+textarea{width:100%;min-height:90px;font:400 1.05rem var(--body);padding:10px 12px;border:2px solid var(--field-line);border-radius:6px;background:var(--bg);color:var(--fg);resize:vertical}
+
+/* Placas de advertência */
+.warn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.warn{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+.diamond{width:34px;height:34px;margin:5px;background:var(--warn);box-shadow:inset 0 0 0 2px var(--warn),inset 0 0 0 4px #111111;transform:rotate(45deg);display:grid;place-items:center;border-radius:4px}
+.diamond svg{transform:rotate(-45deg);width:17px;height:17px}
+.diamond.info{transform:none;background:var(--info);box-shadow:inset 0 0 0 2px var(--info),inset 0 0 0 4px #FFFFFF;border-radius:4px}
+.diamond.info span{transform:none;color:#FFFFFF}
+.diamond span{transform:rotate(-45deg);font:900 1rem var(--display);color:#111111}
+.warn p{font-size:1rem}
+
+.check-groups{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.check{display:flex;flex-direction:column;gap:8px}
+.check label{display:flex;gap:10px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;min-height:56px;align-items:center;cursor:pointer;font-size:1.02rem}
+.check input{margin-top:0;width:26px;height:26px;accent-color:var(--sign);flex:none}
+.check label:has(input:checked){border-color:var(--good);background:color-mix(in srgb,var(--good) 9%,var(--surface))}
+
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.tbl{width:100%;border-collapse:collapse;font-size:1rem;min-width:520px}
+.tbl th,.tbl td{padding:9px 12px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
+.tbl thead th{border-top:0;font-family:var(--body);font-size:.9rem;color:var(--muted);font-weight:600}
+.tbl td.r,.tbl th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.plane{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.plane .card strong{font-family:var(--display);font-size:1.3rem;font-weight:900}
+footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:6px}
+.mbar{display:none}
+.howto{gap:16px}
+.howto-list{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:8px;font-size:1.05rem}
+.sizectl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sizectl .seg button{min-width:56px;font-weight:900}
+
+@media (min-width:821px) and (max-width:1040px){.big{grid-template-columns:1fr 1fr}.big div:first-child{grid-column:1/-1}}
+@media (max-height:620px){.ledger{position:static}}
+@media (max-width:820px){
+  .panel,.check-groups{grid-template-columns:1fr}
+  .day-body{grid-template-columns:minmax(0,1fr)}
+  .ledger{position:static}
+  body{padding-bottom:calc(132px + env(safe-area-inset-bottom,0px))}
+  .mbar{display:flex;flex-direction:column;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:20;
+    background:var(--sign);color:var(--sign-fg);box-shadow:0 -2px 10px rgba(0,0,0,.18);
+    padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+  .mbar-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .mbar-top b{font:900 1.4rem var(--display);font-variant-numeric:tabular-nums}
+  .mbar-top span{font:700 .9rem var(--body);opacity:.9;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .mbar nav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .mbar button{font:800 1rem var(--body);min-height:52px;border-radius:6px;border:1.5px solid color-mix(in srgb,var(--sign-fg) 75%,transparent);background:transparent;color:var(--sign-fg);cursor:pointer;padding:0 4px}
+  .mbar button[aria-current="true"]{background:var(--sign-fg);color:var(--sign)}
+  section,.day,#tabs{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 12px)}
+}
+@media (max-width:560px){
+  .wrap{gap:28px}
+  h2{font-size:1.35rem}
+  .sign-in{padding:16px 14px;gap:12px}
+  .dest h1{font-size:clamp(2.3rem,13vw,3.2rem)}
+  .sign-sub{font-size:.85rem;gap:4px 12px}
+  .chev{display:none}
+  .shields{gap:6px}
+  .shield{min-width:40px;height:44px}
+  .shield b{font-size:.95rem}
+  .road{padding:14px}
+  .road-track{grid-template-columns:1fr;gap:0}
+  .road-track::before{left:9px;right:auto;top:12px;bottom:12px;width:4px;height:auto;
+    background:repeating-linear-gradient(180deg,var(--stripe) 0 12px,transparent 12px 20px)}
+  .stop{flex-direction:row;flex-wrap:wrap;align-items:flex-start;text-align:left;gap:0 12px;padding-block:6px}
+  .stop .dot{flex:none;margin-top:1px}
+  .stop b{font-size:1rem;min-width:7.5em}
+  .stop .where{padding-top:3px}
+  .mleg{display:block;flex-basis:100%;order:-1;margin:2px 0 8px 34px;font:700 .9rem var(--body);color:var(--asphalt-muted);font-style:normal}
+  .legs{display:none}
+  .card{padding:14px}
+  .big{grid-template-columns:1fr 1fr;gap:12px 10px}
+  .big div:first-child{grid-column:1/-1}
+  .big strong{font-size:1.25rem}
+  .scen{grid-template-columns:1fr}
+  .seg{width:100%}
+  .seg button{flex:1;min-height:40px}
+  .bar-row{grid-template-columns:minmax(0,1fr) auto;gap:4px 10px}
+  .bar-row .v{white-space:normal;text-align:right}
+  .bar-row .bar{grid-column:1/-1;grid-row:2}
+  .tab{padding:10px 12px}
+  .day-sign>div{padding:10px 12px}
+  .day-sign h2{font-size:1.15rem}
+  .step{grid-template-columns:56px 1fr;gap:10px;padding:14px 12px}
+  .post{width:52px}
+  .ledger{padding:14px}
+  .ledger table,.ledger tbody,.ledger tfoot{display:block}
+  .ledger thead{display:none}
+  .ledger tr{display:grid;grid-template-columns:minmax(0,1fr) 9em;column-gap:10px;align-items:center;border-top:1px solid var(--line);padding:8px 0}
+  .ledger tbody tr:first-child{border-top:0}
+  .ledger td{border:0;padding:0}
+  .ledger td:first-child{font-weight:700}
+  .ledger td.est{grid-column:1;grid-row:2;text-align:left!important;font-size:.85rem;white-space:normal}
+  .ledger td.est::before{content:"Previsto: "}
+  .ledger td:last-child{grid-column:2;grid-row:1/span 2}
+  .ledger tfoot tr{border-top:2px solid var(--fg)}
+  .ledger tfoot td{border:0}
+  .money{width:100%}
+  .odo{grid-template-columns:1fr 1fr}
+  .odo label:last-child{grid-column:1/-1}
+  .tbl-wrap{overflow:visible}
+  .tbl{min-width:0}
+  .tbl thead{display:none}
+  .tbl tr{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;padding:12px;border-top:1px solid var(--line)}
+  .tbl tbody tr:first-child{border-top:0}
+  .tbl td{border:0;padding:0}
+  .tbl td:first-child{grid-column:1/-1;font:800 .95rem var(--body);color:var(--muted)}
+  .tbl td:nth-child(2){grid-column:1/-1;margin-bottom:6px}
+  .tbl td.r{text-align:left;white-space:normal}
+  .tbl td.r::before{content:attr(data-label);display:block;font:700 .85rem var(--body);color:var(--muted)}
+  .warn{padding:12px}
+}
+@media (prefers-reduced-motion:no-preference){.real{transition:width .4s ease}}
+</style>
+
+<div class="wrap">
+
+  <header class="sign" aria-label="Destinos da viagem">
+    <div class="sign-in">
+      <div class="dest">
+        <h1>Aracaju</h1>
+        <div class="km num"><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 12h5v10h6V12h5z" fill="currentColor"/></svg>2.140 km</div>
+      </div>
+      <div class="dest-2"><b><svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 2 10l7 6v-4h6a4 4 0 0 1 0 8h-3v3h3a7 7 0 0 0 0-14H9z" fill="currentColor"/></svg>Volta · Gonçalves</b><span class="num">2.140 km</span></div>
+      <div class="sign-sub"><span>4.280 km ida e volta</span><span>6 dias de estrada · 4 pernoites</span><span>Casal · diesel 8 km/l a R$ 8,00</span></div>
+      <div class="shields" aria-label="Rodovias do percurso">
+        <span class="shield"><small>BR</small><b>381</b></span><span class="chev" aria-hidden="true">›</span>
+        <span class="shield"><small>BR</small><b>040</b></span><span class="chev" aria-hidden="true">›</span>
+        <span class="shield"><small>BR</small><b>135</b></span><span class="chev" aria-hidden="true">›</span>
+        <span class="shield"><small>BR</small><b>251</b></span><span class="chev" aria-hidden="true">›</span>
+        <span class="shield"><small>BR</small><b>116</b></span><span class="chev" aria-hidden="true">›</span>
+        <span class="shield"><small>BR</small><b>101</b></span>
+      </div>
+    </div>
+  </header>
+
+  <section class="card howto" aria-labelledby="como-t">
+    <div class="sec-head"><h2 id="como-t">Como usar esta página</h2>
+      <div class="sizectl" role="group" aria-label="Tamanho da letra"><span class="label">Tamanho da letra</span>
+        <div class="seg"><button type="button" data-size="1" aria-label="Letra normal">A</button><button type="button" data-size="2" aria-label="Letra grande"><span style="font-size:1.2em">A</span></button><button type="button" data-size="3" aria-label="Letra muito grande"><span style="font-size:1.45em">A</span></button></div></div></div>
+    <ol class="howto-list">
+      <li><b>Escolha Ida ou Volta</b> nos botões verdes mais abaixo.</li>
+      <li><b>Ao passar por cada cidade</b>, toque em <b>“Passei aqui”</b>.</li>
+      <li><b>Quando pagar algo</b>, escreva o valor no quadro <b>“Gastos do dia”</b>. Exemplo: 250 ou 250,50.</li>
+      <li>Tudo é <b>salvo sozinho</b>. Não precisa apertar nenhum botão de salvar.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="painel-t" id="painel">
+    <div class="sec-head">
+      <h2 id="painel-t">Painel da viagem</h2>
+      <span class="pill wait" id="sync" role="status"><i></i><span>Conectando…</span></span>
+    </div>
+    <div class="panel">
+      <div class="card">
+        <div class="big">
+          <div><span class="label">Estimado ida e volta</span><strong class="num" id="t-est">—</strong><span class="sub num" id="t-est-sub"></span></div>
+          <div><span class="label">Gasto real</span><strong class="num" id="t-real">R$ 0,00</strong><span class="sub" id="t-real-sub">nenhum valor anotado</span></div>
+          <div><span class="label">Consumo real</span><strong class="num" id="t-cons">— km/l</strong><span class="sub" id="t-cons-sub">anote hodômetro e litros</span></div>
+        </div>
+        <table class="legs-tbl">
+          <thead><tr><th>Perna</th><th>Estimado</th><th>Real</th></tr></thead>
+          <tbody id="legs-body"></tbody>
+        </table>
+        <div class="scen">
+          <span class="label">Pedágio da ida</span>
+          <div class="seg" role="group" aria-label="Pedágio da ida"><button type="button" data-sc="ida:nov">Novembro</button><button type="button" data-sc="ida:dez">A partir de 1º/12</button></div>
+          <span class="label">Pedágio da volta</span>
+          <div class="seg" role="group" aria-label="Pedágio da volta"><button type="button" data-sc="volta:nov">Novembro</button><button type="button" data-sc="volta:dez">A partir de 1º/12</button></div>
+        </div>
+        <p class="muted small">O máximo inclui 10% de reserva no diesel. A BR-251 (Rota das Gerais) começa a cobrar em 1º de dezembro, então a volta pode cair no período com pedágio mesmo que a ida não.</p>
+      </div>
+      <div class="card">
+        <span class="label">Real × estimado por categoria (ida e volta)</span>
+        <div class="bars" id="bars"></div>
+        <div class="legend"><span><i class="sw-est"></i>Estimado (máx., com reserva)</span><span><i class="sw-real"></i>Real</span><span><i class="sw-over"></i>Acima do estimado</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Roteiro por dia" id="roteiro">
+    <div class="tabs" role="tablist" id="tabs">
+      <button type="button" class="tab" role="tab" id="tab-ida" aria-controls="leg-ida" data-leg="ida"><b>Ida</b><span>Gonçalves → Aracaju · 3 dias</span></button>
+      <button type="button" class="tab" role="tab" id="tab-volta" aria-controls="leg-volta" data-leg="volta"><b>Volta</b><span>Aracaju → Gonçalves · 3 dias</span></button>
+    </div>
+    <div id="legs"></div>
+  </section>
+
+  <section aria-labelledby="ped-t">
+    <h2 id="ped-t">Pedágios no caminho</h2>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Trecho</th><th>Praças</th><th class="r">Novembro</th><th class="r">A partir de 1º/12</th></tr></thead>
+        <tbody>
+          <tr><td>Gonçalves ↔ Montes Claros</td><td>Fernão Dias (~5 praças × R$ 3,70) + BR-040 Capim Branco R$ 16,60, e talvez Curvelo R$ 12,50</td><td class="r" data-label="Novembro">R$ 35,10 a 47,60</td><td class="r" data-label="A partir de 1º/12">R$ 35,10 a 47,60</td></tr>
+          <tr><td>Montes Claros ↔ Jequié</td><td>BR-251 Rota das Gerais, 4 pórticos free flow</td><td class="r" data-label="Novembro">R$ 0,00</td><td class="r" data-label="A partir de 1º/12">~R$ 35,00</td></tr>
+          <tr><td>Jequié ↔ Aracaju</td><td>BR-116 na Bahia e BR-101</td><td class="r" data-label="Novembro">R$ 0,00</td><td class="r" data-label="A partir de 1º/12">R$ 0,00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small">Os valores valem por sentido, então pagam-se na ida e de novo na volta. O de dezembro na BR-251 é estimativa (tarifa do edital com o desconto de 19% do leilão). Free flow sem tag: pague pelo site ou app da concessionária para não levar multa por evasão.</p>
+  </section>
+
+  <section aria-labelledby="warn-t">
+    <h2 id="warn-t">Atenção na estrada</h2>
+    <div class="warn-grid">
+      <div class="warn"><div class="diamond" aria-hidden="true"><span>!</span></div><div><h3>Não rode à noite</h3><p class="muted">BR-251 e BR-116 entre MG e BA são pista simples, com muito caminhão e animais na pista.</p></div></div>
+      <div class="warn"><div class="diamond" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#111111" d="M4 3h10v18H4zM6 5v5h6V5zM15 8l3 3v7a1 1 0 0 0 2 0v-8l-3-3 1-1 3 3v9a3 3 0 0 1-6 0v-6h-1z"/></svg></div><div><h3>Meio tanque, sempre</h3><p class="muted">Entre Montes Claros e Vitória da Conquista os postos ficam espaçados.</p></div></div>
+      <div class="warn"><div class="diamond" aria-hidden="true"><span>S</span></div><div><h3>Serra de Grão Mogol</h3><p class="muted">Curvas fortes na BR-251. Na ida, use freio motor nas descidas; na volta, conte com caminhões lentos nas subidas.</p></div></div>
+      <div class="warn"><div class="diamond info" aria-hidden="true"><span>i</span></div><div><h3>Véspera de cada perna</h3><p class="muted">Confira Waze ou Google Maps e os boletins da PRF. Obras e desvios mudam o tempo do trecho.</p></div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="chk-t" id="lista">
+    <div class="sec-head"><h2 id="chk-t">Listas de conferência</h2><span class="label" id="chk-count"></span></div>
+    <div class="check-groups">
+      <div><h3 style="margin-bottom:10px">Antes de sair de Gonçalves</h3><div class="check" id="check-ida"></div></div>
+      <div><h3 style="margin-bottom:10px">Antes de voltar de Aracaju</h3><div class="check" id="check-volta"></div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="av-t">
+    <h2 id="av-t">E se fosse de avião?</h2>
+    <div class="plane">
+      <div class="card"><span class="label">Passagens, casal, ida e volta</span><strong class="num">R$ 1.740 a 3.200</strong><span class="muted small">Dezembro chega a ~R$ 3.440. Média dos buscadores, não cotação.</span></div>
+      <div class="card"><span class="label">Avião com extras</span><strong class="num">R$ 2.700 a 3.700</strong><span class="muted small">Mala, ida a Guarulhos e lanches. Fora estacionamento e carro alugado em Aracaju.</span></div>
+      <div class="card"><span class="label">Carro, ida e volta</span><strong class="num" id="plane-car">—</strong><span class="muted small">Diesel, pedágio, hotel e comida. Vocês ficam com o carro em Aracaju.</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Distâncias, tempos, diárias e refeições são estimativas. Pedágios: Motiva (Fernão Dias), Via Cristais (BR-040), Ecovias das Gerais (BR-251) e DNIT (BR-116/BA), conforme notícias de 2026. A estadia em Aracaju não entra nas contas.</p>
+    <p>O que você anota fica salvo nesta página e aparece em qualquer aparelho em que você abrir o link.</p>
+  </footer>
+</div>
+
+<div class="mbar" role="region" aria-label="Resumo rápido">
+  <div class="mbar-top"><b id="m-real">R$ 0,00</b><span id="m-sub">gasto real</span></div>
+  <nav>
+    <button type="button" data-go="painel">Painel</button>
+    <button type="button" data-go="ida">Ida</button>
+    <button type="button" data-go="volta">Volta</button>
+    <button type="button" data-go="lista">Listas</button>
+  </nav>
+</div>
+
+<script>
+(function(){
+"use strict";
+const BRL=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+const NUM=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:1});
+const fmt=v=>BRL.format(v||0);
+const short=v=>fmt(v).replace(/^R\$\s?/,'');
+const $=id=>document.getElementById(id);
+
+/* Roteiro: [de, para, rodovia, km, parada, observação] */
+const LEGS=[
+ {id:"ida",label:"Ida",stops:[["Gonçalves","MG","km 0"],["Montes Claros","MG","km 900"],["Jequié","BA","km 1.570"],["Aracaju","SE","km 2.140"]],days:[
+  {n:1,i:1,from:"Gonçalves",to:"Montes Claros",km:900,time:"11 a 12 h",night:"Pernoite em Montes Claros",
+   est:{diesel:[900,900],ped:{nov:[35.1,47.6],dez:[35.1,47.6]},hotel:[250,400],alim:[300,460]},
+   steps:[["Gonçalves/MG","Paraisópolis/MG","",20,"Saída","Saia até 5h30 para chegar de dia."],
+    ["Paraisópolis/MG","Cambuí/MG","",30,"","Entre na Fernão Dias sentido Belo Horizonte."],
+    ["Cambuí/MG","Pouso Alegre/MG","381",45,"Café + abastecer","R$ 3,70 por praça na Fernão Dias."],
+    ["Pouso Alegre/MG","Sto. Antônio do Amparo/MG","381",195,"Almoço","Região de Lavras e Oliveira. Trecho duplicado."],
+    ["Sto. Antônio do Amparo/MG","Contagem/BH","381",185,"","Pegue o Anel Rodoviário e a BR-040 sentido Brasília."],
+    ["Contagem/BH","Sete Lagoas/MG","040",70,"Abastecer","Pedágio Capim Branco R$ 16,60."],
+    ["Sete Lagoas/MG","Curvelo/MG","040",95,"Café da tarde","Possível pedágio em Curvelo (R$ 12,50)."],
+    ["Curvelo/MG","Montes Claros/MG","135",260,"Pernoite","Pista simples. Hotel perto do anel facilita a saída cedo."]]},
+  {n:2,i:2,from:"Montes Claros",to:"Jequié",km:670,time:"9 a 10 h",night:"Pernoite em Jequié",
+   est:{diesel:[670,670],ped:{nov:[0,0],dez:[35,35]},hotel:[200,350],alim:[250,390]},
+   steps:[["Montes Claros/MG","Francisco Sá/MG","251",50,"Abastecer cheio","Poucos postos na BR-251 e muito caminhão."],
+    ["Francisco Sá/MG","Grão Mogol/MG","251",85,"","Serra com curvas e descidas fortes."],
+    ["Grão Mogol/MG","Salinas/MG","251",85,"Parada técnica","Pórticos free flow a partir de 1º/12."],
+    ["Salinas/MG","Entroncamento BR-116","251",130,"","Siga a BR-116 sentido Bahia."],
+    ["Entroncamento BR-116","Cândido Sales/BA","116",70,"Almoço (opção 1)","Divisa MG/BA. BR-116 baiana sem pedágio."],
+    ["Cândido Sales/BA","Vitória da Conquista/BA","116",90,"Almoço (opção 2) + abastecer","Cidade grande, boa estrutura."],
+    ["Vitória da Conquista/BA","Jequié/BA","116",160,"Pernoite","Chegue antes de escurecer."]]},
+  {n:3,i:3,from:"Jequié",to:"Aracaju",km:570,time:"8 h",night:"Chegada a Aracaju",
+   est:{diesel:[570,570],ped:{nov:[0,0],dez:[0,0]},hotel:[0,0],alim:[150,230]},
+   steps:[["Jequié/BA","Milagres/BA","116",85,"Café","Pista simples, muito caminhão."],
+    ["Milagres/BA","Feira de Santana/BA","116",155,"Almoço + abastecer","Contorne Feira e pegue a BR-101 sentido Aracaju."],
+    ["Feira de Santana/BA","Alagoinhas/BA","101",80,"","BR-101 sem pedágio."],
+    ["Alagoinhas/BA","Entre Rios/BA","101",50,"",""],
+    ["Entre Rios/BA","Esplanada/BA","101",30,"Abastecer se precisar",""],
+    ["Esplanada/BA","Rio Real/BA","101",75,"","Divisa com Sergipe."],
+    ["Rio Real/BA","Estância/SE","101",40,"Última parada","Boa parte duplicada em Sergipe."],
+    ["Estância/SE","Aracaju/SE","101",55,"Chegada",""]]}]},
+ {id:"volta",label:"Volta",stops:[["Aracaju","SE","km 0"],["Jequié","BA","km 570"],["Montes Claros","MG","km 1.240"],["Gonçalves","MG","km 2.140"]],days:[
+  {n:4,i:1,from:"Aracaju",to:"Jequié",km:570,time:"8 h",night:"Pernoite em Jequié",
+   est:{diesel:[570,570],ped:{nov:[0,0],dez:[0,0]},hotel:[200,350],alim:[250,390]},
+   steps:[["Aracaju/SE","Estância/SE","101",55,"Saída","Café da manhã no hotel e saída cedo."],
+    ["Estância/SE","Rio Real/BA","101",40,"","Divisa com a Bahia."],
+    ["Rio Real/BA","Esplanada/BA","101",75,"Abastecer",""],
+    ["Esplanada/BA","Entre Rios/BA","101",30,"",""],
+    ["Entre Rios/BA","Alagoinhas/BA","101",50,"",""],
+    ["Alagoinhas/BA","Feira de Santana/BA","101",80,"Almoço + abastecer","Em Feira, pegue a BR-116 sentido Vitória da Conquista."],
+    ["Feira de Santana/BA","Milagres/BA","116",155,"Café da tarde","Pista simples, muito caminhão."],
+    ["Milagres/BA","Jequié/BA","116",85,"Pernoite","Dia mais curto: dá para chegar cedo e descansar."]]},
+  {n:5,i:2,from:"Jequié",to:"Montes Claros",km:670,time:"9 a 10 h",night:"Pernoite em Montes Claros",
+   est:{diesel:[670,670],ped:{nov:[0,0],dez:[35,35]},hotel:[250,400],alim:[250,390]},
+   steps:[["Jequié/BA","Vitória da Conquista/BA","116",160,"Café + abastecer","Saia cedo: o trecho da BR-251 vem depois do almoço."],
+    ["Vitória da Conquista/BA","Cândido Sales/BA","116",90,"",""],
+    ["Cândido Sales/BA","Entroncamento BR-251","116",70,"","Divisa BA/MG. Entre na BR-251 sentido Montes Claros."],
+    ["Entroncamento BR-251","Salinas/MG","251",130,"Almoço + abastecer cheio","Poucos postos daqui em diante."],
+    ["Salinas/MG","Grão Mogol/MG","251",85,"","Pórticos free flow a partir de 1º/12."],
+    ["Grão Mogol/MG","Francisco Sá/MG","251",85,"","Serra com subidas fortes e caminhões lentos."],
+    ["Francisco Sá/MG","Montes Claros/MG","251",50,"Pernoite",""]]},
+  {n:6,i:3,from:"Montes Claros",to:"Gonçalves",km:900,time:"11 a 12 h",night:"Chegada em casa",
+   est:{diesel:[900,900],ped:{nov:[35.1,47.6],dez:[35.1,47.6]},hotel:[0,0],alim:[150,230]},
+   steps:[["Montes Claros/MG","Curvelo/MG","135",260,"Café + abastecer","Café no hotel, saída até 5h30."],
+    ["Curvelo/MG","Sete Lagoas/MG","040",95,"","Possível pedágio em Curvelo (R$ 12,50)."],
+    ["Sete Lagoas/MG","Contagem/BH","040",70,"Almoço (opção 1)","Pedágio Capim Branco. Anel Rodoviário e Fernão Dias sentido São Paulo."],
+    ["Contagem/BH","Sto. Antônio do Amparo/MG","381",185,"Almoço (opção 2) + abastecer","Trecho duplicado."],
+    ["Sto. Antônio do Amparo/MG","Pouso Alegre/MG","381",195,"Café da tarde",""],
+    ["Pouso Alegre/MG","Cambuí/MG","381",45,"","Saia da Fernão Dias em Cambuí."],
+    ["Cambuí/MG","Paraisópolis/MG","",30,"",""],
+    ["Paraisópolis/MG","Gonçalves/MG","",20,"Chegada","Em casa."]]}]}
+];
+const DAYS=LEGS.flatMap(l=>l.days.map(d=>Object.assign(d,{leg:l.id})));
+const CATS=[["diesel","Diesel"],["ped","Pedágio"],["hotel","Hospedagem"],["alim","Alimentação"],["outros","Outros"]];
+const CHECKS={
+ ida:["Revisão: óleo, filtros, freios e arrefecimento","Pneus calibrados, estepe incluso","CNH e documento do veículo (CRLV digital) no celular","Tag de pedágio ativa, ou app da concessionária instalado","Hotéis da ida reservados com cancelamento grátis","Rota baixada para usar sem sinal (Google Maps offline)","Cooler com água, frutas e lanches","Carregador veicular e cabo do celular","Dinheiro trocado e cartão para pedágio e postos","Waze e boletins da PRF conferidos na véspera"],
+ volta:["Hotéis da volta reservados (Jequié e Montes Claros)","Pneus recalibrados e nível do óleo conferido","Cooler reabastecido","Pagamento dos pedágios free flow da ida conferido","Waze e boletins da PRF conferidos na véspera"]};
+
+/* Estado salvo: v = valores, c = caixas marcadas, n = notas, sc = cenário de pedágio por perna */
+let state={v:{},c:{},n:{},sc:{ida:"nov",volta:"nov"}};
+function normalize(d){d=d&&typeof d==='object'?d:{};
+  let sc=d.sc;if(typeof sc==='string')sc={ida:sc,volta:sc};sc=sc&&typeof sc==='object'?sc:{};
+  return{v:Object.assign({},d.v),c:Object.assign({},d.c),n:Object.assign({},d.n),
+    sc:{ida:sc.ida==='dez'?'dez':'nov',volta:sc.volta==='dez'?'dez':'nov'}}}
+try{state=normalize(JSON.parse(localStorage.getItem('rumo-aracaju')||'null'))}catch(e){}
+let ui={leg:"ida"};
+try{const l=localStorage.getItem('rumo-aracaju-aba');if(l==='volta')ui.leg='volta'}catch(e){}
+
+const parse=s=>{s=String(s==null?'':s).trim().replace(/[r$\s]/gi,'');if(!s)return NaN;
+  if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');
+  else if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');
+  const x=Number(s);return x>=0?x:NaN};
+const val=k=>{const x=state.v[k];return typeof x==='number'&&isFinite(x)?x:NaN};
+const show=x=>isFinite(x)?String(x).replace('.',','):'';
+
+/* Montagem das pernas (uma vez) */
+function shield(r){return r?`<span class="shield sm" aria-label="BR-${r}"><small>BR</small><b>${r}</b></span>`:`<span class="chip">Estrada local</span>`}
+function chipClass(s){return /Pernoite|Chegada/.test(s)?'chip key':(/bastecer/.test(s)?'chip fuel':'chip')}
+function dayHTML(d){
+  let acc=0;
+  const steps=d.steps.map((s,i)=>{acc+=s[3];const key=`d${d.n}s${i}`;
+    return `<li class="step" data-step="${key}"><div class="marco"><div class="post"><small>KM</small>${acc}</div></div>
+      <div class="step-main"><div class="route">${s[0]} <span class="to">→ ${s[1]}</span></div>
+      <div class="step-tags">${shield(s[2])}<span class="chip">${s[3]} km</span>${s[4]?`<span class="${chipClass(s[4])}">${s[4]}</span>`:''}
+      <label class="chk" for="c-${key}"><input type="checkbox" id="c-${key}" data-c="${key}" aria-label="Passei aqui: ${s[0]} até ${s[1]}">Passei aqui</label><span class="done-badge" aria-hidden="true">✓ Feito</span></div>
+      ${s[5]?`<p class="obs">${s[5]}</p>`:''}</div></li>`}).join('');
+  const rows=CATS.map(([k,l])=>{const id=`d${d.n}_${k}`;
+    return `<tr><td>${l}</td><td class="est" id="est-${d.n}-${k}"></td><td><input class="money" id="${id}" data-k="${id}" inputmode="decimal" enterkeyhint="next" autocomplete="off" placeholder="0,00" aria-label="${l}: quanto gastei, ${d.leg} dia ${d.i}"></td></tr>`}).join('');
+  const L=d.leg==='ida'?'Ida':'Volta';
+  return `<section class="day" id="dia${d.n}" aria-labelledby="dia${d.n}-t">
+    <div class="day-sign"><div><h2 id="dia${d.n}-t">${d.from} → ${d.to}</h2><span class="tag">${L.toUpperCase()} · DIA ${d.i}</span></div></div>
+    <div class="day-meta"><span>${d.km} km</span><span>${d.time} de rodagem</span><span>${d.night}</span></div>
+    <div class="day-body"><ol class="steps">${steps}</ol>
+      <aside class="ledger" aria-label="Gastos: ${L.toLowerCase()}, dia ${d.i}">
+        <div class="sec-head"><h3>Gastos do dia</h3><span class="diff" id="diff${d.n}"></span></div>
+        <table><thead><tr><th>Item</th><th>Previsto</th><th>Gastei (R$)</th></tr></thead><tbody>${rows}</tbody>
+          <tfoot><tr><td>Total</td><td class="est" id="estT${d.n}"></td><td class="num" id="realT${d.n}">R$ 0,00</td></tr></tfoot></table>
+        <div class="odo">
+          <label for="d${d.n}_odo1">Hodômetro na saída<input class="money" id="d${d.n}_odo1" data-k="d${d.n}_odo1" inputmode="decimal" autocomplete="off" placeholder="km"></label>
+          <label for="d${d.n}_odo2">Hodômetro na chegada<input class="money" id="d${d.n}_odo2" data-k="d${d.n}_odo2" inputmode="decimal" autocomplete="off" placeholder="km"></label>
+          <label for="d${d.n}_lit">Litros abastecidos<input class="money" id="d${d.n}_lit" data-k="d${d.n}_lit" inputmode="decimal" autocomplete="off" placeholder="L"></label>
+        </div>
+        <div class="consumo"><span>Rodei: <b id="kmr${d.n}">—</b></span><span>Consumo aprox.: <b id="cons${d.n}">—</b></span></div>
+        <textarea id="d${d.n}_nota" data-n="d${d.n}_nota" placeholder="Anotações do dia: posto bom, restaurante, trecho ruim…" aria-label="Anotações: ${L.toLowerCase()}, dia ${d.i}"></textarea>
+      </aside></div></section>`}
+function roadHTML(l){
+  return `<div class="road" aria-label="Pernoites da ${l.label.toLowerCase()}"><div class="road-track">${l.stops.map((s,i)=>
+    `<div class="stop${i===3?' end':''}">${i?`<em class="mleg">Dia ${i} · ${l.days[i-1].km} km · ${l.days[i-1].time}</em>`:''}<span class="dot" aria-hidden="true"></span><b>${s[0]}</b><span class="where">${s[1]} · ${s[2]}</span></div>`).join('')}</div>
+    <div class="legs" aria-hidden="true">${l.days.map(d=>`<div class="leg"><b>Dia ${d.i}</b>${d.km} km · ${d.time.replace(' a ','–')}</div>`).join('')}</div></div>`}
+$('legs').innerHTML=LEGS.map(l=>`<div class="leg-wrap" id="leg-${l.id}" role="tabpanel" tabindex="0" aria-labelledby="tab-${l.id}">${roadHTML(l)}${l.days.map(dayHTML).join('')}</div>`).join('');
+for(const g of ['ida','volta'])$('check-'+g).innerHTML=CHECKS[g].map((t,i)=>`<label for="chk-${g}${i}"><input type="checkbox" id="chk-${g}${i}" data-c="${g==='ida'?'chk'+i:'chkv'+i}"><span>${t}</span></label>`).join('');
+
+/* Referências fixas para não procurar no DOM a cada tecla */
+const R={};
+DAYS.forEach(d=>{R[d.n]={diff:$('diff'+d.n),estT:$('estT'+d.n),realT:$('realT'+d.n),kmr:$('kmr'+d.n),cons:$('cons'+d.n),
+  est:Object.fromEntries(CATS.map(([k])=>[k,$(`est-${d.n}-${k}`)]))}});
+const stepEls=[...document.querySelectorAll('.step')];
+const kEls=[...document.querySelectorAll('[data-k]')],cEls=[...document.querySelectorAll('[data-c]')],nEls=[...document.querySelectorAll('[data-n]')];
+const scBtns=[...document.querySelectorAll('[data-sc]')];
+$('bars').innerHTML=CATS.map(([k,l])=>`<div class="bar-row"><span>${l}</span><div class="bar" role="img" id="bar-${k}"><div class="est"></div><div class="real"></div></div><span class="v" id="barv-${k}"></span></div>`).join('');
+const BARS=Object.fromEntries(CATS.map(([k])=>{const b=$('bar-'+k);return[k,{bar:b,est:b.querySelector('.est'),real:b.querySelector('.real'),v:$('barv-'+k)}]}));
+const checkKeys=[...CHECKS.ida.map((_,i)=>'chk'+i),...CHECKS.volta.map((_,i)=>'chkv'+i)];
+
+function fillInputs(){
+  kEls.forEach(el=>{if(document.activeElement!==el)el.value=show(val(el.dataset.k))});
+  cEls.forEach(el=>{el.checked=!!state.c[el.dataset.c]});
+  nEls.forEach(el=>{if(document.activeElement!==el)el.value=state.n[el.dataset.n]||''});
+}
+const estOf=(d,k)=>k==='ped'?d.est.ped[state.sc[d.leg]]:(k==='outros'?[0,0]:d.est[k]);
+const rangeTxt=(a,b)=>a===b?fmt(a):fmt(a)+'–'+short(b);
+
+function recompute(){
+  scBtns.forEach(b=>{const[l,s]=b.dataset.sc.split(':');b.setAttribute('aria-pressed',String(state.sc[l]===s))});
+  const leg={ida:{min:0,max:0,res:0,real:0},volta:{min:0,max:0,res:0,real:0}};
+  const cat={};CATS.forEach(([k])=>cat[k]={e:0,r:0});
+  let filled=0,kmT=0,litT=0;
+  for(const d of DAYS){
+    const r=R[d.n];let dMin=0,dMax=0,dReal=0,dFilled=0;
+    const res=d.est.diesel[1]*0.10;
+    for(const[k]of CATS){const[a,b]=estOf(d,k);dMin+=a;dMax+=b;cat[k].e+=b+(k==='diesel'?res:0);
+      r.est[k].textContent=k==='outros'?'—':rangeTxt(a,b);
+      const x=val(`d${d.n}_${k}`);if(isFinite(x)){dReal+=x;dFilled++;cat[k].r+=x}}
+    r.estT.textContent=rangeTxt(dMin,dMax);r.realT.textContent=fmt(dReal);
+    if(dFilled){const over=dReal-(dMax+res),under=dMin-dReal;
+      if(over>0){r.diff.className='diff up';r.diff.textContent='+'+fmt(over)+' acima'}
+      else if(under>0){r.diff.className='diff down';r.diff.textContent=fmt(under)+' abaixo'}
+      else{r.diff.className='diff';r.diff.textContent='dentro da faixa'}}
+    else{r.diff.className='diff';r.diff.textContent=''}
+    const o1=val(`d${d.n}_odo1`),o2=val(`d${d.n}_odo2`),l=val(`d${d.n}_lit`);
+    const kmr=isFinite(o1)&&isFinite(o2)&&o2>o1?o2-o1:NaN,ok=isFinite(kmr)&&isFinite(l)&&l>0;
+    r.kmr.textContent=isFinite(kmr)?NUM.format(kmr)+' km':'—';
+    r.cons.textContent=ok?NUM.format(kmr/l)+' km/l':'—';
+    if(ok){kmT+=kmr;litT+=l}
+    const g=leg[d.leg];g.min+=dMin;g.max+=dMax;g.res+=res;g.real+=dReal;filled+=dFilled;
+  }
+  const tMin=leg.ida.min+leg.volta.min,tMax=leg.ida.max+leg.ida.res+leg.volta.max+leg.volta.res,tReal=leg.ida.real+leg.volta.real;
+  $('t-est').textContent=fmt(tMin)+' a '+short(tMax);
+  $('t-est-sub').textContent='sem a reserva de diesel: até '+fmt(tMax-leg.ida.res-leg.volta.res);
+  $('t-real').textContent=fmt(tReal);
+  $('t-real-sub').textContent=!filled?'nenhum valor anotado':(tReal>tMax?'acima do estimado em '+fmt(tReal-tMax):`${filled} ${filled===1?'item anotado':'itens anotados'}`);
+  $('t-cons').textContent=litT?NUM.format(kmT/litT)+' km/l':'— km/l';
+  $('t-cons-sub').textContent=litT?`${NUM.format(kmT)} km com ${NUM.format(litT)} L (previsto: 8)`:'anote hodômetro e litros';
+  $('legs-body').innerHTML=['ida','volta'].map(k=>{const g=leg[k];return `<tr><td>${k==='ida'?'Ida':'Volta'}</td><td>${fmt(g.min)}–${short(g.max+g.res)}</td><td>${fmt(g.real)}</td></tr>`}).join('')+
+    `<tr class="tot"><td>Total</td><td>${fmt(tMin)}–${short(tMax)}</td><td>${fmt(tReal)}</td></tr>`;
+  $('plane-car').textContent=fmt(tMin)+' a '+short(tMax);
+  const scale=Math.max(1,...CATS.map(([k])=>Math.max(cat[k].e,cat[k].r)));
+  for(const[k,l]of CATS){const e=cat[k].e,r=cat[k].r,B=BARS[k];
+    B.est.style.width=(e/scale*100)+'%';B.real.style.width=(r/scale*100)+'%';B.real.classList.toggle('over',r>e);
+    B.v.textContent=short(r)+' / '+short(e);B.bar.setAttribute('aria-label',`${l}: real ${fmt(r)} de ${fmt(e)} estimados`)}
+  stepEls.forEach(li=>li.classList.toggle('done',!!state.c[li.dataset.step]));
+  $('chk-count').textContent=`${checkKeys.filter(k=>state.c[k]).length} de ${checkKeys.length} conferidos`;
+  $('m-real').textContent=fmt(tReal);
+  $('m-sub').textContent='estimado até '+fmt(tMax);
+}
+
+/* Abas Ida / Volta */
+function setLeg(id,focus){ui.leg=id;try{localStorage.setItem('rumo-aracaju-aba',id)}catch(e){}
+  for(const l of LEGS){const on=l.id===id;$('leg-'+l.id).hidden=!on;const t=$('tab-'+l.id);t.setAttribute('aria-selected',String(on));t.tabIndex=on?0:-1}
+  document.querySelectorAll('[data-go]').forEach(b=>{if(b.dataset.go===id)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current')});
+  if(focus)$('tab-'+id).focus()}
+document.querySelectorAll('.tab').forEach(t=>{t.addEventListener('click',()=>setLeg(t.dataset.leg));
+  t.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();setLeg(ui.leg==='ida'?'volta':'ida',true)}
+    else if(e.key==='Home'){e.preventDefault();setLeg('ida',true)}else if(e.key==='End'){e.preventDefault();setLeg('volta',true)}})});
+const smooth=()=>!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>{
+  const g=b.dataset.go;if(g==='ida'||g==='volta'){setLeg(g);$('tabs').scrollIntoView({behavior:smooth()?'smooth':'auto',block:'start'});return}
+  $(g).scrollIntoView({behavior:smooth()?'smooth':'auto',block:'start'})}));
+
+/* Gravação: neste aparelho na hora, na página depois de uma pausa */
+const sync=$('sync');
+function setSync(cls,txt){sync.className='pill '+cls;sync.lastElementChild.textContent=txt}
+let ref=null,timer=null,writing=false,pending=false,rafId=0;
+function saveLocal(){try{localStorage.setItem('rumo-aracaju',JSON.stringify(state))}catch(e){}}
+function setDirty(on){try{on?localStorage.setItem('rumo-aracaju-dirty','1'):localStorage.removeItem('rumo-aracaju-dirty')}catch(e){}}
+function isDirty(){try{return localStorage.getItem('rumo-aracaju-dirty')==='1'}catch(e){return false}}
+async function flush(){
+  clearTimeout(timer);timer=null;
+  if(!ref)return;
+  if(writing){pending=true;return}
+  writing=true;setSync('wait','Salvando…');
+  let ok=false;
+  try{await ref.set(JSON.parse(JSON.stringify(state)));ok=true}catch(e){}
+  writing=false;
+  if(pending){pending=false;flush();return}
+  if(ok){setDirty(false);setSync('ok','Tudo salvo')}
+  else{setSync('off','Sem internet: salvo neste celular');timer=setTimeout(flush,5000)}
+}
+function schedule(){cancelAnimationFrame(rafId);rafId=requestAnimationFrame(recompute)}
+function changed(){saveLocal();setDirty(true);schedule();clearTimeout(timer);
+  if(ref){setSync('wait','Salvando…');timer=setTimeout(flush,900)}else setSync('off','Salvo neste celular')}
+document.addEventListener('input',e=>{const t=e.target;
+  if(t.dataset.k){const x=parse(t.value);if(isFinite(x))state.v[t.dataset.k]=x;else delete state.v[t.dataset.k];changed()}
+  else if(t.dataset.n!==undefined){state.n[t.dataset.n]=t.value;changed()}});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.c){state.c[t.dataset.c]=t.checked;changed()}});
+document.addEventListener('focusout',e=>{const t=e.target;if(t.dataset&&t.dataset.k)t.value=show(val(t.dataset.k))});
+scBtns.forEach(b=>b.addEventListener('click',()=>{const[l,s]=b.dataset.sc.split(':');if(state.sc[l]!==s){state.sc[l]=s;changed()}}));
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&timer)flush()});
+
+const sizeBtns=[...document.querySelectorAll('[data-size]')];
+function setSize(n){document.documentElement.dataset.size=n;sizeBtns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.size===n)));try{localStorage.setItem('rumo-aracaju-letra',n)}catch(e){}}
+sizeBtns.forEach(b=>b.addEventListener('click',()=>setSize(b.dataset.size)));
+let sz='1';try{sz=localStorage.getItem('rumo-aracaju-letra')||'1'}catch(e){}
+setSize(['1','2','3'].includes(sz)?sz:'1');
+setLeg(ui.leg);fillInputs();recompute();
+
+(async()=>{
+  let cloud=false;
+  const loadTimer=setTimeout(()=>{if(!cloud)setSync('off','Sem internet: salvo neste celular')},10000);
+  let db=null;try{db=window.claude&&await window.claude.use('db')}catch(e){db=null}
+  if(!db){clearTimeout(loadTimer);setSync('off','Salvo neste celular');return}
+  ref=db.doc('viagem/ida');
+  let first=true;
+  ref.onSnapshot(snap=>{
+    if(snap.metadata.hasPendingWrites)return;
+    if(!snap.metadata.fromCache){clearTimeout(loadTimer);cloud=true}
+    if(first&&!snap.metadata.fromCache&&isDirty()){flush()}
+    else if(snap.exists){if(!timer&&!writing&&!isDirty()){state=normalize(snap.data());saveLocal();fillInputs();recompute();setSync('ok','Tudo salvo')}}
+    else if(first&&!snap.metadata.fromCache){
+      const has=Object.keys(state.v).length||Object.keys(state.c).length||Object.keys(state.n).length;
+      if(has)flush();else setSync('ok','Pronto para anotar')}
+    if(!snap.metadata.fromCache)first=false;
+  },()=>{clearTimeout(loadTimer);ref=null;setSync('off','Salvo neste celular')});
+})();
+})();
+</script>
+
+</body></html>
