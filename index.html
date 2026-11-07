@@ -40,6 +40,7 @@
 *{box-sizing:border-box}
 html{color-scheme:light}
 body{margin:0}
+[hidden]{display:none!important}
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 img{max-width:100%}
 html{font-size:112.5%}
@@ -131,7 +132,7 @@ section{display:flex;flex-direction:column;gap:16px}
 .dot{width:22px;height:22px;border-radius:50%;background:var(--asphalt-fg);border:4px solid var(--asphalt);box-shadow:0 0 0 2px var(--stripe);z-index:1}
 .stop.end .dot{background:var(--stripe)}
 .stop b{font-family:var(--display);font-size:.95rem;font-weight:800;line-height:1.15}
-.stop .where{font-family:var(--mono);font-size:.85rem;color:var(--asphalt-muted)}
+.stop .where{font-family:var(--mono);font-size:.95rem;color:var(--asphalt-muted)}
 .mleg{display:none}
 .legs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 12.5% 0}
 .leg{text-align:center;font-family:var(--mono);font-size:.85rem;color:var(--asphalt-muted);border-top:1px dashed color-mix(in srgb,var(--asphalt-fg) 30%,transparent);padding-top:6px}
@@ -172,7 +173,7 @@ label.chk:has(input:checked){border-color:var(--good);background:color-mix(in sr
 .ledger th{font-family:var(--body);font-size:.9rem;color:var(--muted);font-weight:600;text-align:left;padding:0 0 6px}
 .ledger th:not(:first-child),.ledger td:not(:first-child){text-align:right}
 .ledger td{padding:8px 0;border-top:1px solid var(--line);vertical-align:middle}
-.ledger td.est{font-family:var(--mono);font-size:.85rem;color:var(--muted);white-space:nowrap;padding-right:8px}
+.ledger td.est{font-family:var(--mono);font-size:.95rem;color:var(--muted);white-space:nowrap;padding-right:8px}
 .ledger tfoot td{font-weight:800;border-top:2px solid var(--fg)}
 .money{width:7.5em;max-width:100%;font:700 1.1rem var(--mono);text-align:right;padding:8px 10px;min-height:52px;border:2px solid var(--field-line);border-radius:6px;background:var(--bg);color:var(--fg)}
 .money::placeholder{color:var(--muted)}
@@ -214,8 +215,71 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
 .install{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;background:var(--surface-2);border-radius:10px;padding:12px 14px}
 .install img{border-radius:12px}
 .install p{font-size:.95rem}
-.btn{font:800 1.05rem var(--body);min-height:52px;padding:0 20px;border-radius:10px;border:0;background:var(--sign);color:var(--sign-fg);cursor:pointer}
 @media (max-width:560px){.install{grid-template-columns:48px 1fr}.install img{width:48px;height:48px}.install .btn{grid-column:1/-1}}
+.premio-lock{gap:16px}
+.lockrow{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.lockicon{font-size:2.4rem;line-height:1}
+.prog{display:flex;flex-direction:column;gap:6px}
+.prog-bar{height:16px;border-radius:8px;background:var(--surface-2);border:1px solid var(--field-line);overflow:hidden}
+.prog-bar i{display:block;height:100%;width:0;background:var(--sign);border-radius:8px}
+.premio-open{display:flex;flex-direction:column;gap:14px}
+.premio-msg{font-weight:900;font-size:1.15rem;color:var(--good)}
+.premio-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+.premio-stage{display:flex;justify-content:center}
+.premio-stage canvas{width:100%;max-width:360px;height:auto;border-radius:12px;box-shadow:0 6px 22px rgba(0,0,0,.22);background:#FBF3E6}
+.premio-stage.feed canvas{max-width:460px}
+.premio-ctl{display:flex;flex-direction:column;gap:14px;min-width:0}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.seg2 button{min-height:56px;border-radius:10px;border:2px solid var(--field-line);background:var(--surface);color:var(--fg);font:800 1rem var(--body);cursor:pointer;line-height:1.2;padding:4px 8px}
+.seg2 button[aria-pressed="true"]{background:var(--sign);border-color:var(--sign);color:var(--sign-fg)}
+.seg2 button:disabled{border-style:dashed;color:var(--muted);cursor:not-allowed}
+.pkm{width:100%!important;text-align:left!important;margin-top:6px}
+#premio-pill.ok i{background:var(--good)}
+.toast{position:fixed;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--surface);border:3px solid var(--sign);border-radius:14px;padding:14px;box-shadow:0 8px 30px rgba(0,0,0,.3);font-weight:800;font-size:1.05rem;max-width:620px;margin:0 auto}
+.toast .btn{min-height:52px;padding:0 18px}
+@media (max-width:820px){.premio-grid{grid-template-columns:minmax(0,1fr)}.toast{bottom:calc(140px + env(safe-area-inset-bottom,0px))}}
+.btn{font:800 1.1rem var(--body);border-radius:10px;border:2px solid var(--sign);background:var(--sign);color:var(--sign-fg);padding:0 16px;min-height:52px;cursor:pointer}
+.btn:disabled{background:var(--surface-2);color:var(--muted);border:2px dashed var(--field-line);cursor:not-allowed}
+.btn.ghost{background:var(--surface);color:var(--fg);border:2px solid var(--field-line)}
+.linkbtn{align-self:flex-start;font:700 1rem var(--body);color:var(--good);background:none;border:0;padding:8px 0;min-height:44px;text-decoration:underline;cursor:pointer}
+.cday{font-size:1.1rem}
+.cday .moved{display:block;color:var(--bad);font-weight:700;font-size:.95rem}
+.speak-msg:not(:empty){background:color-mix(in srgb,var(--good) 14%,var(--surface));border:2px solid var(--good);padding:12px 14px;border-radius:10px}
+.speak-msg.err:not(:empty){background:color-mix(in srgb,var(--bad) 10%,var(--surface));border-color:var(--bad)}
+.recent li button.armed{background:var(--bad);border-color:var(--bad);color:var(--surface)}
+#cf-ok{scroll-margin-bottom:150px}
+.speak{border:3px solid var(--sign);gap:16px}
+.speak-tip{font-size:1.02rem}
+.daypick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.daypick button{min-height:56px;border-radius:10px;border:2px solid var(--field-line);background:var(--surface);color:var(--fg);font:800 1rem var(--body);cursor:pointer;line-height:1.15;padding:4px}
+.daypick button small{display:block;font-weight:600;font-size:.9rem;color:var(--muted)}
+.daypick button[aria-checked="true"]{background:var(--sign);border-color:var(--sign);color:var(--sign-fg)}
+.daypick button[aria-checked="true"] small{color:var(--sign-fg)}
+#speak-form{display:flex;flex-direction:column;gap:10px}
+.speak-row{display:flex;gap:8px}
+.speak-in{flex:1;min-width:0;min-height:60px;font:600 1.2rem var(--body);padding:10px 14px;border:3px solid var(--field-line);border-radius:10px;background:var(--bg);color:var(--fg)}
+.speak-hint{font-size:1rem;color:var(--muted)}
+.btn-big{min-height:60px;font-size:1.15rem;width:100%}
+.btn.mic{min-width:6.5em}
+.btn.mic.on{background:var(--bad)}
+.confirm{display:flex;flex-direction:column;gap:12px;background:var(--surface-2);border-radius:10px;padding:14px}
+.confirm h3{font-size:1.2rem}
+.citem{display:flex;flex-direction:column;gap:8px;background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px}
+.citem .big-line{font:900 1.35rem var(--display)}
+.catpick{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5em,1fr));gap:6px}
+.catpick button{min-height:52px;border-radius:8px;border:2px solid var(--field-line);background:var(--surface);color:var(--fg);font:700 1rem var(--body);cursor:pointer}
+.catpick button[aria-pressed="true"]{background:var(--sign);color:var(--sign-fg);border-color:var(--sign)}
+.confirm-actions{display:grid;grid-template-columns:2fr 1fr;gap:8px}
+.speak-msg{font-weight:800;font-size:1.05rem;color:var(--good)}
+.speak-msg.err{color:var(--bad)}
+.recent{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.recent li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center;background:var(--surface-2);border-radius:8px;padding:10px 12px}
+.recent li b{font-size:1.05rem;overflow-wrap:anywhere}
+.recent li span{font-size:.9rem;color:var(--muted);grid-column:1}
+.recent li button{grid-column:2;grid-row:1/span 2;min-height:48px;padding:0 14px;border-radius:8px;border:2px solid var(--field-line);background:var(--surface);color:var(--fg);font:700 .95rem var(--body);cursor:pointer}
+@media (max-width:560px){.speak-row{flex-direction:column}.btn.mic{width:100%;min-height:56px}.daypick{grid-template-columns:1fr 1fr}}
+body.typing .mbar{display:none!important}
+.sizectl .seg button{min-height:48px!important}
 .howto-list{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:8px;font-size:1.05rem}
 .sizectl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .sizectl .seg button{min-width:56px;font-weight:900}
@@ -232,10 +296,10 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
     padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
   .mbar-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
   .mbar-top b{font:900 1.4rem var(--display);font-variant-numeric:tabular-nums}
-  .mbar-top span{font:700 .9rem var(--body);opacity:.9;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .mbar-top span{font:700 .9rem var(--body);opacity:.9;text-align:right;min-width:0}
   .mbar nav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
   .mbar button{font:800 1rem var(--body);min-height:52px;border-radius:6px;border:1.5px solid color-mix(in srgb,var(--sign-fg) 75%,transparent);background:transparent;color:var(--sign-fg);cursor:pointer;padding:0 4px}
-  .mbar button[aria-current="true"]{background:var(--sign-fg);color:var(--sign)}
+  .mbar button[data-go="anotar"]{background:var(--sign-fg);color:var(--sign)}
   section,.day,#tabs{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 12px)}
 }
 @media (max-width:560px){
@@ -263,9 +327,10 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
   .big div:first-child{grid-column:1/-1}
   .big strong{font-size:1.25rem}
   .scen{grid-template-columns:1fr}
+  .legs-tbl{font-size:.92rem}
   .seg{width:100%}
   .seg button{flex:1;min-height:40px}
-  .bar-row{grid-template-columns:minmax(0,1fr) auto;gap:4px 10px}
+  .bar-row{grid-template-columns:auto minmax(0,1fr);gap:4px 10px}
   .bar-row .v{white-space:normal;text-align:right}
   .bar-row .bar{grid-column:1/-1;grid-row:2}
   .tab{padding:10px 12px}
@@ -300,6 +365,14 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
   .tbl td.r::before{content:attr(data-label);display:block;font:700 .85rem var(--body);color:var(--muted)}
   .warn{padding:12px}
 }
+@media (max-width:400px){html[data-size="2"] .big,html[data-size="3"] .big{grid-template-columns:1fr}
+  html[data-size="3"] .legs-tbl,html[data-size="3"] .legs-tbl tbody{display:block}html[data-size="3"] .legs-tbl thead{display:none}
+  html[data-size="3"] .legs-tbl tr{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;border-top:1px solid var(--line);padding:8px 0}
+  html[data-size="3"] .legs-tbl tr.tot{border-top:2px solid var(--fg)}html[data-size="3"] .legs-tbl td{border:0;padding:0;text-align:left}
+  html[data-size="3"] .legs-tbl td:first-child{grid-column:1/-1}
+  html[data-size="3"] .legs-tbl td:nth-child(2)::before{content:"Previsto";display:block;font:600 .8rem var(--body);color:var(--muted)}
+  html[data-size="3"] .legs-tbl td:nth-child(3)::before{content:"Gastei";display:block;font:600 .8rem var(--body);color:var(--muted)}
+  html[data-size="3"] .mbar-top{flex-wrap:wrap}html[data-size="3"] .mbar-top b{font-size:1.15rem}html[data-size="3"] .mbar button{font-size:.8rem}}
 @media (prefers-reduced-motion:no-preference){.real{transition:width .4s ease}}
 </style>
 
@@ -326,6 +399,30 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
     </div>
   </header>
 
+  <section class="card speak" id="anotar" aria-labelledby="anotar-t">
+    <h2 id="anotar-t">Anotar um gasto</h2>
+    <p class="speak-tip">Escreva ou fale como se estivesse contando para alguém. Exemplos: <b>“almoço 85”</b>, <b>“abasteci 320 reais e 45 litros”</b>, <b>“pedágio 16,60”</b>, <b>“hotel 280”</b>.</p>
+    <div>
+      <p class="label" id="dia-lbl">Em que dia da viagem você está?</p>
+      <div class="daypick" role="radiogroup" aria-labelledby="dia-lbl" id="daypick"></div>
+    </div>
+    <form id="speak-form" autocomplete="off">
+      <label for="speak-in" class="label">O que você gastou?</label>
+      <div class="speak-row">
+        <input id="speak-in" class="speak-in" type="text" enterkeyhint="done" placeholder="Ex.: almoço 85 reais">
+        <button type="button" class="btn mic" id="mic-btn" hidden aria-label="Falar o gasto">🎤 Falar</button>
+      </div>
+      <p class="speak-hint" id="speak-hint">Para falar em vez de digitar, toque no campo e depois no microfone 🎤 do teclado.</p>
+      <button type="submit" class="btn btn-big">Entender o gasto</button>
+    </form>
+    <div class="confirm" id="confirm" hidden aria-live="polite"></div>
+    <p class="speak-msg" id="speak-msg" role="status" aria-live="polite"></p>
+    <div id="recent-wrap" hidden>
+      <h3>Últimas anotações</h3>
+      <ul class="recent" id="recent"></ul>
+    </div>
+  </section>
+
   <section class="card howto" aria-labelledby="como-t">
     <div class="sec-head"><h2 id="como-t">Como usar esta página</h2>
       <div class="sizectl" role="group" aria-label="Tamanho da letra"><span class="label">Tamanho da letra</span>
@@ -338,7 +435,7 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
     <ol class="howto-list">
       <li><b>Escolha Ida ou Volta</b> nos botões verdes mais abaixo.</li>
       <li><b>Ao passar por cada cidade</b>, toque em <b>“Passei aqui”</b>.</li>
-      <li><b>Quando pagar algo</b>, escreva o valor no quadro <b>“Gastos do dia”</b>. Exemplo: 250 ou 250,50.</li>
+      <li><b>Quando pagar algo</b>, use o quadro <b>“Anotar um gasto”</b> logo acima: escreva ou fale, por exemplo, “almoço 85”. Ele entende e mostra para você conferir.</li>
       <li>Tudo é <b>salvo sozinho neste celular</b>. Não precisa apertar nenhum botão de salvar.</li>
     </ol>
   </section>
@@ -351,12 +448,12 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
     <div class="panel">
       <div class="card">
         <div class="big">
-          <div><span class="label">Estimado ida e volta</span><strong class="num" id="t-est">—</strong><span class="sub num" id="t-est-sub"></span></div>
-          <div><span class="label">Gasto real</span><strong class="num" id="t-real">R$ 0,00</strong><span class="sub" id="t-real-sub">nenhum valor anotado</span></div>
+          <div><span class="label">Previsto ida e volta</span><strong class="num" id="t-est">—</strong><span class="sub num" id="t-est-sub"></span></div>
+          <div><span class="label">Já gastei</span><strong class="num" id="t-real">R$ 0,00</strong><span class="sub" id="t-real-sub">nenhum valor anotado</span></div>
           <div><span class="label">Consumo real</span><strong class="num" id="t-cons">— km/l</strong><span class="sub" id="t-cons-sub">anote hodômetro e litros</span></div>
         </div>
         <table class="legs-tbl">
-          <thead><tr><th>Perna</th><th>Estimado</th><th>Real</th></tr></thead>
+          <thead><tr><th>Trecho</th><th>Previsto</th><th>Gastei</th></tr></thead>
           <tbody id="legs-body"></tbody>
         </table>
         <div class="scen">
@@ -365,12 +462,12 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
           <span class="label">Pedágio da volta</span>
           <div class="seg" role="group" aria-label="Pedágio da volta"><button type="button" data-sc="volta:nov">Novembro</button><button type="button" data-sc="volta:dez">A partir de 1º/12</button></div>
         </div>
-        <p class="muted small">O máximo inclui 10% de reserva no diesel. A BR-251 (Rota das Gerais) começa a cobrar em 1º de dezembro, então a volta pode cair no período com pedágio mesmo que a ida não.</p>
+        <p class="muted small">O máximo já inclui uma folga de 10% no diesel. A BR-251 (Rota das Gerais) começa a cobrar em 1º de dezembro, então a volta pode cair no período com pedágio mesmo que a ida não.</p>
       </div>
       <div class="card">
-        <span class="label">Real × estimado por categoria (ida e volta)</span>
+        <span class="label">Gastei × previsto, por tipo (ida e volta)</span>
         <div class="bars" id="bars"></div>
-        <div class="legend"><span><i class="sw-est"></i>Estimado (máx., com reserva)</span><span><i class="sw-real"></i>Real</span><span><i class="sw-over"></i>Acima do estimado</span></div>
+        <div class="legend"><span><i class="sw-est"></i>Previsto (máximo)</span><span><i class="sw-real"></i>Gastei</span><span><i class="sw-over"></i>Passou do previsto</span></div>
       </div>
     </div>
   </section>
@@ -395,7 +492,7 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
         </tbody>
       </table>
     </div>
-    <p class="muted small">Os valores valem por sentido, então pagam-se na ida e de novo na volta. O de dezembro na BR-251 é estimativa (tarifa do edital com o desconto de 19% do leilão). Free flow sem tag: pague pelo site ou app da concessionária para não levar multa por evasão.</p>
+    <p class="muted small">Os valores valem por sentido, então pagam-se na ida e de novo na volta. O de dezembro na BR-251 é estimativa (tarifa do edital com o desconto de 19% do leilão). Nos pedágios sem cabine (pórticos), quem não tem tag precisa pagar depois pelo site ou app da concessionária, senão leva multa.</p>
   </section>
 
   <section aria-labelledby="warn-t">
@@ -416,6 +513,34 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
     </div>
   </section>
 
+  <section id="premio" aria-labelledby="premio-t">
+    <div class="sec-head"><h2 id="premio-t">Prêmio da viagem</h2><span class="pill" id="premio-pill"><i></i><span>Trancado</span></span></div>
+    <div class="card premio-lock" id="premio-lock">
+      <div class="lockrow"><div class="lockicon" aria-hidden="true">🔒</div>
+        <div><h3>O vídeo da viagem está guardado</h3>
+        <p class="muted">Ele é liberado quando vocês marcarem <b>“Passei aqui”</b> na chegada a Aracaju, a última etapa do dia 3 da ida. Os km do vídeo saem do que vocês anotaram no painel do carro.</p></div></div>
+      <div class="prog"><div class="prog-bar" aria-hidden="true"><i id="premio-bar"></i></div><p id="premio-txt" class="small"></p></div>
+    </div>
+    <div class="premio-open" id="premio-open" hidden>
+      <p class="premio-msg" id="premio-msg"></p>
+      <div class="premio-grid">
+        <div class="premio-stage"><canvas id="pcv" width="1080" height="1920" role="img" aria-label="Animação da caminhonete vermelha com o casal chegando a Aracaju"></canvas></div>
+        <div class="premio-ctl">
+          <div><p class="label" id="pv-lbl">Qual vídeo?</p>
+            <div class="seg2" role="group" aria-labelledby="pv-lbl"><button type="button" data-pv="ida">Chegamos a Aracaju</button><button type="button" data-pv="volta">Ida e volta</button></div></div>
+          <div><p class="label" id="pf-lbl">Formato</p>
+            <div class="seg2" role="group" aria-labelledby="pf-lbl"><button type="button" data-pf="story">Reels / Story</button><button type="button" data-pf="feed">Feed</button></div></div>
+          <div><label class="label" for="pkm">Km rodados no vídeo</label>
+            <input id="pkm" class="money pkm" inputmode="numeric" autocomplete="off"><p class="small muted" id="pkm-hint"></p></div>
+          <button type="button" class="btn btn-big" id="prec">Baixar vídeo (9 segundos)</button>
+          <button type="button" class="btn ghost btn-big" id="ppng">Baixar foto</button>
+          <p class="speak-msg" id="pmsg" role="status" aria-live="polite"></p>
+          <p class="small muted">O vídeo é gravado em tempo real: deixe a página aberta durante os 9 segundos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section aria-labelledby="av-t">
     <h2 id="av-t">E se fosse de avião?</h2>
     <div class="plane">
@@ -431,16 +556,281 @@ footer{font-size:.95rem;color:var(--muted);border-top:1px solid var(--line);padd
   </footer>
 </div>
 
+<div class="toast" id="toast" role="status" aria-live="polite" hidden><span id="toast-txt"></span><button type="button" class="btn" id="toast-go">Ver o vídeo</button></div>
 <div class="mbar" role="region" aria-label="Resumo rápido">
-  <div class="mbar-top"><b id="m-real">R$ 0,00</b><span id="m-sub">gasto real</span></div>
+  <div class="mbar-top"><b id="m-real">R$ 0,00</b><span id="m-sub">gastei</span></div>
   <nav>
-    <button type="button" data-go="painel">Painel</button>
+    <button type="button" data-go="anotar">Anotar</button>
     <button type="button" data-go="ida">Ida</button>
     <button type="button" data-go="volta">Volta</button>
     <button type="button" data-go="lista">Listas</button>
   </nav>
 </div>
 
+<script>
+/* Animação "Rumo a Aracaju": desenha o quadro do instante t (segundos) num canvas 1080 de largura.
+   Determinística: o mesmo t sempre dá o mesmo quadro (serve para prévia ao vivo e para gerar o vídeo). */
+const ANIM=(function(){
+const DUR=9;                       // duração do laço
+const C={sky1:'#FBF3E6',sky2:'#F5D7B5',sun:'#D9774F',ink:'#2B2420',cream:'#FFF9F0',
+  green:'#0A6A39',white:'#FFFFFF',yel:'#F2B705',asph:'#3A3633',
+  red:'#B0242F',redHi:'#D2414B',redLo:'#7E1620',glass:'#BFD9E6',tire:'#231F1D',chrome:'#C9C6C1',
+  skin1:'#E6B08A',skin2:'#D99E76',cap:'#5B5856',hair1:'#9A9590',hair2:'#2A211D'};
+const lerp=(a,b,t)=>a+(b-a)*t, clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+function mix(c1,c2,t){const a=parseInt(c1.slice(1),16),b=parseInt(c2.slice(1),16);
+  const r=Math.round(lerp(a>>16,b>>16,t)),g=Math.round(lerp(a>>8&255,b>>8&255,t)),bl=Math.round(lerp(a&255,b&255,t));
+  return '#'+((1<<24)|(r<<16)|(g<<8)|bl).toString(16).slice(1)}
+function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function fit(text,size,maxW,weight,family){let s=size;do{ctx.font=`${weight} ${s}px ${family||'Overpass'}`;if(ctx.measureText(text).width<=maxW)break;s-=2}while(s>10);return s}
+let ctx,W,H;
+
+/* ---- movimento ---- */
+const V=1000,DRIVE=6.2,STOP=0.9;
+function worldX(t){if(t<DRIVE)return V*t;const d=Math.min(t-DRIVE,STOP);return V*DRIVE+V*(d-d*d/(2*STOP))}
+const WEND=worldX(DUR);
+const speedAt=t=>t<DRIVE?V:Math.max(0,V*(1-(t-DRIVE)/STOP));
+
+/* ---- cenário ---- */
+function hill(y0,amp,freq,seed,off,color){
+  ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(0,H);
+  for(let x=0;x<=W+20;x+=20){const u=(x+off)*freq;
+    const y=y0-amp*(0.55*Math.sin(u+seed)+0.3*Math.sin(u*2.3+seed*1.7)+0.15*Math.sin(u*5.1+seed*.3));ctx.lineTo(x,y)}
+  ctx.lineTo(W,H);ctx.closePath();ctx.fill()}
+function tree(x,y,s){ctx.fillStyle='#6E4B32';ctx.fillRect(x-4*s,y-30*s,8*s,30*s);
+  ctx.fillStyle='#5E8C4E';ctx.beginPath();ctx.arc(x,y-44*s,24*s,0,7);ctx.fill();ctx.fillStyle='#74A35F';ctx.beginPath();ctx.arc(x-8*s,y-52*s,14*s,0,7);ctx.fill()}
+function shrub(x,y,s){ctx.fillStyle='#A69A5B';ctx.beginPath();ctx.ellipse(x,y-10*s,22*s,12*s,0,0,7);ctx.fill();
+  ctx.strokeStyle='#7D6E3E';ctx.lineWidth=3*s;ctx.beginPath();ctx.moveTo(x+18*s,y);ctx.lineTo(x+18*s,y-38*s);ctx.moveTo(x+18*s,y-24*s);ctx.lineTo(x+30*s,y-30*s);ctx.stroke()}
+function palm(x,y,s,sway){ctx.strokeStyle='#8A6440';ctx.lineWidth=10*s;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+14*s,y-70*s,x+6*s+sway,y-130*s);ctx.stroke();
+  const tx=x+6*s+sway,ty=y-130*s;ctx.fillStyle='#4F8F55';
+  for(let i=0;i<6;i++){const a=-Math.PI/2+(i-2.5)*0.55+Math.sin(sway*.05+i)*.05;ctx.save();ctx.translate(tx,ty);ctx.rotate(a);
+    ctx.beginPath();ctx.ellipse(36*s,0,40*s,10*s,0.25,0,7);ctx.fill();ctx.restore()}
+  ctx.fillStyle='#7A5530';ctx.beginPath();ctx.arc(tx,ty+4*s,7*s,0,7);ctx.fill();ctx.lineCap='butt'}
+function citySign(x,yGround,name,uf,s){
+  const w=fit(name,40*s,360*s,900)&&ctx.measureText(name).width+80*s,h=96*s;
+  ctx.fillStyle='#5D5A57';ctx.fillRect(x+16*s,yGround-160*s,10*s,160*s);ctx.fillRect(x+w-26*s,yGround-160*s,10*s,160*s);
+  ctx.fillStyle=C.green;rr(x,yGround-160*s-h,w,h,10*s);ctx.fill();ctx.strokeStyle=C.white;ctx.lineWidth=4*s;rr(x+7*s,yGround-153*s-h,w-14*s,h-14*s,6*s);ctx.stroke();
+  ctx.fillStyle=C.white;ctx.font=`900 ${Math.round(40*s)}px Overpass`;ctx.fillText(name,x+40*s,yGround-160*s-h+52*s);
+  ctx.font=`700 ${Math.round(22*s)}px Overpass`;ctx.fillText(uf,x+40*s,yGround-160*s-h+80*s)}
+
+/* ---- personagens ---- */
+function eye(x,y,r){ctx.fillStyle=C.ink;ctx.beginPath();ctx.ellipse(x,y,r*.085,r*.1,0,0,7);ctx.fill();ctx.fillStyle='#FFFFFF';ctx.beginPath();ctx.arc(x+r*.03,y-r*.035,r*.03,0,7);ctx.fill()}
+function brow(x,y,r,dir,col){ctx.strokeStyle=col;ctx.lineWidth=r*.09;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x-r*.17,y+dir*0);ctx.quadraticCurveTo(x,y-r*.08,x+r*.17,y+r*.02);ctx.stroke();ctx.lineCap='butt'}
+function man(cx,cy,r,wave){
+  const SK=C.skin1,SKd='#C98F6A',HAIR='#17130F';
+  // corpo: jaqueta com gola e zíper, camiseta cinza
+  ctx.fillStyle='#4C4842';rr(cx-r*1.1,cy+r*.78,r*2.2,r*1.45,r*.55);ctx.fill();
+  ctx.fillStyle='#8B8B8B';ctx.beginPath();ctx.moveTo(cx-r*.32,cy+r*.8);ctx.lineTo(cx+r*.32,cy+r*.8);ctx.lineTo(cx+r*.18,cy+r*1.5);ctx.lineTo(cx-r*.18,cy+r*1.5);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#5E5952';ctx.beginPath();ctx.moveTo(cx-r*.35,cy+r*.78);ctx.lineTo(cx-r*.62,cy+r*.82);ctx.lineTo(cx-r*.3,cy+r*1.3);ctx.closePath();ctx.fill();
+  ctx.beginPath();ctx.moveTo(cx+r*.35,cy+r*.78);ctx.lineTo(cx+r*.62,cy+r*.82);ctx.lineTo(cx+r*.3,cy+r*1.3);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#D6D0C4';ctx.lineWidth=r*.05;ctx.beginPath();ctx.moveTo(cx-r*.22,cy+r*1.32);ctx.lineTo(cx-r*.22,cy+r*2.2);ctx.moveTo(cx+r*.22,cy+r*1.32);ctx.lineTo(cx+r*.22,cy+r*2.2);ctx.stroke();
+  // pescoço e orelhas
+  ctx.fillStyle=SKd;ctx.fillRect(cx-r*.24,cy+r*.62,r*.48,r*.26);
+  ctx.fillStyle=SK;ctx.beginPath();ctx.ellipse(cx-r*.86,cy+r*.08,r*.16,r*.24,0,0,7);ctx.ellipse(cx+r*.86,cy+r*.08,r*.16,r*.24,0,0,7);ctx.fill();
+  // rosto
+  ctx.fillStyle=SK;ctx.beginPath();ctx.ellipse(cx,cy+r*.02,r*.84,r*.98,0,0,7);ctx.fill();
+  ctx.fillStyle='rgba(150,90,60,.18)';ctx.beginPath();ctx.ellipse(cx,cy+r*.72,r*.55,r*.22,0,0,Math.PI);ctx.fill();
+  // cabelo preto: costeletas e nuca aparecendo sob a boina
+  ctx.fillStyle=HAIR;ctx.beginPath();ctx.ellipse(cx-r*.74,cy-r*.18,r*.17,r*.34,.12,0,7);ctx.fill();ctx.beginPath();ctx.ellipse(cx+r*.74,cy-r*.18,r*.17,r*.34,-.12,0,7);ctx.fill();
+  ctx.fillStyle='#4A3F38';ctx.beginPath();ctx.ellipse(cx-r*.72,cy-r*.3,r*.06,r*.14,.1,0,7);ctx.fill();
+  // boina (tweed) com aba
+  ctx.fillStyle='#55524F';ctx.beginPath();ctx.ellipse(cx-r*.06,cy-r*.52,r*1.02,r*.6,-.08,Math.PI*.98,Math.PI*2.02);ctx.fill();
+  ctx.fillStyle='#45423F';ctx.beginPath();ctx.ellipse(cx+r*.5,cy-r*.5,r*.66,r*.17,-.14,0,7);ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.16)';for(let i=0;i<22;i++){const ax=cx-r*.9+((i*37)%17)/17*r*1.75,ay=cy-r*.95+((i*53)%11)/11*r*.38;ctx.fillRect(ax,ay,r*.07,r*.03)}
+  ctx.strokeStyle='rgba(0,0,0,.25)';ctx.lineWidth=r*.04;ctx.beginPath();ctx.moveTo(cx-r*.95,cy-r*.5);ctx.quadraticCurveTo(cx,cy-r*.42,cx+r*.95,cy-r*.56);ctx.stroke();
+  // sobrancelhas pretas, olhos, óculos
+  brow(cx-r*.34,cy-r*.3,r,1,HAIR);brow(cx+r*.36,cy-r*.3,r,1,HAIR);
+  eye(cx-r*.33,cy-r*.08,r);eye(cx+r*.38,cy-r*.08,r);
+  glasses(cx,cy-r*.08,r,'#2E2C2A',false);
+  // nariz e sorriso
+  ctx.strokeStyle=SKd;ctx.lineWidth=r*.07;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(cx+r*.04,cy+r*.02);ctx.quadraticCurveTo(cx+r*.16,cy+r*.24,cx-r*.02,cy+r*.28);ctx.stroke();
+  if(wave!=null){ctx.fillStyle='#7A2E2A';ctx.beginPath();ctx.arc(cx+r*.04,cy+r*.45,r*.24,0,Math.PI);ctx.fill();ctx.fillStyle='#FFFFFF';ctx.fillRect(cx-r*.16,cy+r*.45,r*.4,r*.07)}
+  else{ctx.strokeStyle=C.ink;ctx.lineWidth=r*.08;ctx.beginPath();ctx.arc(cx+r*.04,cy+r*.36,r*.24,.25,Math.PI-.25);ctx.stroke()}
+  ctx.lineCap='butt';
+  ctx.fillStyle='rgba(217,119,79,.30)';ctx.beginPath();ctx.arc(cx-r*.52,cy+r*.28,r*.14,0,7);ctx.arc(cx+r*.58,cy+r*.28,r*.14,0,7);ctx.fill();
+  if(wave!=null)arm(cx+r*.95,cy+r*1.05,r,wave,'#4C4842',SK,1);
+}
+function woman(cx,cy,r,wave){
+  const SK=C.skin2,SKd='#BF8462',HAIR='#17120F',HL='#3A2F29';
+  // cabelo de trás: ondas até o ombro
+  ctx.fillStyle=HAIR;ctx.beginPath();ctx.moveTo(cx-r*1.0,cy+r*.95);
+  for(let i=0;i<=16;i++){const a=Math.PI*.95+i/16*Math.PI*1.1;const k=r*(1.18+.1*Math.sin(i*1.9));ctx.lineTo(cx+Math.cos(a)*k,cy+r*.1+Math.sin(a)*k)}
+  ctx.quadraticCurveTo(cx+r*1.35,cy+r*.7,cx+r*1.05,cy+r*1.05);ctx.lineTo(cx-r*1.05,cy+r*1.05);ctx.closePath();ctx.fill();
+  for(const sx of[-1,1]){for(let j=0;j<3;j++){ctx.beginPath();ctx.arc(cx+sx*r*(1.02+j*.04),cy+r*(.35+j*.28),r*.2,0,7);ctx.fill()}}
+  // corpo: regata branca com botões
+  ctx.fillStyle=SK;ctx.beginPath();ctx.ellipse(cx,cy+r*.98,r*.95,r*.3,0,0,7);ctx.fill();
+  ctx.fillStyle='#F5F2EC';rr(cx-r*.95,cy+r*1.0,r*1.9,r*1.25,r*.45);ctx.fill();
+  ctx.fillStyle=SK;ctx.beginPath();ctx.ellipse(cx,cy+r*1.0,r*.42,r*.26,0,0,Math.PI);ctx.fill();
+  ctx.fillStyle='#2E3550';ctx.fillRect(cx-r*.09,cy+r*1.22,r*.18,r*.7);ctx.fillStyle='#E6E2DA';ctx.beginPath();ctx.arc(cx,cy+r*1.38,r*.05,0,7);ctx.arc(cx,cy+r*1.62,r*.05,0,7);ctx.fill();
+  ctx.fillStyle=SKd;ctx.fillRect(cx-r*.22,cy+r*.62,r*.44,r*.3);
+  // rosto
+  ctx.fillStyle=SK;ctx.beginPath();ctx.ellipse(cx,cy+r*.04,r*.8,r*.96,0,0,7);ctx.fill();
+  // franja de lado e mechas com brilho
+  ctx.fillStyle=HAIR;ctx.beginPath();ctx.moveTo(cx-r*.85,cy-r*.05);ctx.quadraticCurveTo(cx-r*.9,cy-r*1.05,cx+r*.1,cy-r*1.02);ctx.quadraticCurveTo(cx+r*.9,cy-r*.95,cx+r*.86,cy-r*.1);
+  ctx.quadraticCurveTo(cx+r*.55,cy-r*.55,cx+r*.05,cy-r*.62);ctx.quadraticCurveTo(cx-r*.45,cy-r*.6,cx-r*.85,cy-r*.05);ctx.fill();
+  ctx.beginPath();ctx.ellipse(cx-r*.8,cy+r*.15,r*.22,r*.55,.12,0,7);ctx.fill();ctx.beginPath();ctx.ellipse(cx+r*.82,cy+r*.18,r*.2,r*.52,-.12,0,7);ctx.fill();
+  ctx.strokeStyle=HL;ctx.lineWidth=r*.06;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(cx-r*.5,cy-r*.85);ctx.quadraticCurveTo(cx-r*.1,cy-r*.98,cx+r*.35,cy-r*.85);ctx.moveTo(cx-r*1.12,cy+r*.45);ctx.quadraticCurveTo(cx-r*1.2,cy+r*.7,cx-r*1.05,cy+r*.9);ctx.stroke();
+  // sobrancelhas, olhos, óculos gatinho
+  brow(cx-r*.33,cy-r*.3,r,1,'#2A211C');brow(cx+r*.35,cy-r*.3,r,1,'#2A211C');
+  eye(cx-r*.32,cy-r*.05,r);eye(cx+r*.36,cy-r*.05,r);
+  glasses(cx,cy-r*.05,r,'#9A7A66',true);
+  // nariz, boca, brincos de argola
+  ctx.strokeStyle=SKd;ctx.lineWidth=r*.07;ctx.beginPath();ctx.moveTo(cx+r*.03,cy+r*.05);ctx.quadraticCurveTo(cx+r*.14,cy+r*.26,cx-r*.03,cy+r*.29);ctx.stroke();
+  ctx.fillStyle='#B4565A';ctx.beginPath();ctx.ellipse(cx+r*.03,cy+r*.5,r*.2,r*(wave!=null?.12:.07),0,0,7);ctx.fill();
+  if(wave!=null){ctx.fillStyle='#FFFFFF';ctx.fillRect(cx-r*.12,cy+r*.46,r*.3,r*.05)}
+  ctx.strokeStyle='#D9B04A';ctx.lineWidth=r*.06;ctx.beginPath();ctx.arc(cx-r*.84,cy+r*.52,r*.11,0,7);ctx.stroke();ctx.beginPath();ctx.arc(cx+r*.86,cy+r*.52,r*.11,0,7);ctx.stroke();
+  ctx.lineCap='butt';
+  ctx.fillStyle='rgba(217,119,79,.30)';ctx.beginPath();ctx.arc(cx-r*.5,cy+r*.3,r*.13,0,7);ctx.arc(cx+r*.54,cy+r*.3,r*.13,0,7);ctx.fill();
+  if(wave!=null)arm(cx-r*.95,cy+r*1.05,r,wave,SK,SK,-1);
+}
+function glasses(cx,cy,r,col,cat){
+  ctx.strokeStyle=col;ctx.lineWidth=r*(cat?.1:.075);ctx.fillStyle='rgba(191,217,230,.30)';
+  const gw=r*.6,gh=r*.4;
+  for(const sx of[-1,1]){const x=cx+sx*r*.37-gw/2,y=cy-gh/2;ctx.beginPath();
+    if(cat){ctx.moveTo(x,y+gh*.1);ctx.lineTo(x+gw,y-gh*.05);ctx.quadraticCurveTo(x+gw+gw*.08*(sx>0?1:0),y+gh,x+gw*.5,y+gh);ctx.quadraticCurveTo(x-gw*.05,y+gh,x,y+gh*.1)}
+    else rr(x,y,gw,gh,r*.08);
+    ctx.fill();ctx.stroke()}
+  if(cat){ctx.fillStyle='#6E5040';for(let i=0;i<6;i++){ctx.beginPath();ctx.arc(cx+(i<3?-1:1)*r*(.2+(i%3)*.16),cy-gh*.45+(i%2)*r*.04,r*.035,0,7);ctx.fill()}}
+  ctx.beginPath();ctx.moveTo(cx-r*.07,cy-gh*.1);ctx.quadraticCurveTo(cx,cy-gh*.3,cx+r*.07,cy-gh*.1);ctx.stroke();
+}
+function arm(x,y,r,a,sleeve,skin,dir){ctx.save();ctx.translate(x,y);ctx.rotate(dir*(0.5+Math.sin(a)*.38));
+  ctx.fillStyle=sleeve;rr(-r*.18,-r*1.5,r*.36,r*1.5,r*.18);ctx.fill();
+  ctx.fillStyle=skin;ctx.beginPath();ctx.arc(0,-r*1.6,r*.28,0,7);ctx.fill();
+  ctx.fillRect(-r*.22,-r*2.0,r*.1,r*.35);ctx.fillRect(-r*.08,-r*2.08,r*.1,r*.42);ctx.fillRect(r*.06,-r*2.02,r*.1,r*.38);ctx.restore()}
+
+/* ---- caminhonete vermelha estilo anos 90 (vista lateral, frente para a direita) ---- */
+function wheel(x,y,R,rot){
+  ctx.fillStyle=C.tire;ctx.beginPath();ctx.arc(x,y,R,0,7);ctx.fill();
+  ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.fillStyle='#3A3532';
+  for(let i=0;i<14;i++){ctx.rotate(Math.PI*2/14);ctx.fillRect(R*.86,-R*.07,R*.16,R*.14)}
+  ctx.fillStyle=C.chrome;ctx.beginPath();ctx.arc(0,0,R*.52,0,7);ctx.fill();ctx.fillStyle='#8F8B86';
+  for(let i=0;i<6;i++){ctx.rotate(Math.PI/3);ctx.beginPath();ctx.arc(R*.3,0,R*.07,0,7);ctx.fill()}
+  ctx.fillStyle='#6E6A66';ctx.beginPath();ctx.arc(0,0,R*.14,0,7);ctx.fill();ctx.restore()}
+function truck(x,yG,s,t,wave,rise){
+  const bounce=speedAt(t)>1?Math.sin(t*17)*2.2*s:0, rot=worldX(t)/(52*s);
+  ctx.save();ctx.translate(x,yG);ctx.scale(s,s);
+  ctx.fillStyle='rgba(0,0,0,.22)';ctx.beginPath();ctx.ellipse(270,4,290,16,0,0,7);ctx.fill();     // sombra
+  ctx.save();ctx.translate(0,bounce/s);
+  // caixa de carga + cabine + capô
+  ctx.fillStyle=C.red;ctx.beginPath();
+  ctx.moveTo(4,-66);ctx.lineTo(4,-150);ctx.lineTo(196,-150);ctx.lineTo(206,-262);ctx.lineTo(334,-262);ctx.lineTo(372,-172);
+  ctx.lineTo(522,-160);ctx.quadraticCurveTo(534,-158,534,-140);ctx.lineTo(534,-74);ctx.lineTo(4,-66);ctx.closePath();ctx.fill();
+  ctx.fillStyle=C.redHi;ctx.beginPath();ctx.moveTo(206,-262);ctx.lineTo(334,-262);ctx.lineTo(337,-254);ctx.lineTo(207,-254);ctx.closePath();ctx.fill();
+  ctx.fillRect(372,-170,150,8);
+  ctx.fillStyle=C.redLo;ctx.fillRect(4,-90,530,24);                                                  // saia escura
+  ctx.fillStyle='#E9E2D6';ctx.fillRect(10,-118,520,5);                                               // friso lateral
+  // janelas + bonequinhos
+  ctx.save();ctx.beginPath();ctx.moveTo(214,-246);ctx.lineTo(268,-246);ctx.lineTo(268,-178);ctx.lineTo(210,-178);ctx.closePath();
+  ctx.moveTo(278,-246);ctx.lineTo(328,-246);ctx.lineTo(356,-178);ctx.lineTo(278,-178);ctx.closePath();
+  ctx.fillStyle=C.glass;ctx.fill();ctx.clip();
+  if(wave==null){woman(240,-202,26,null);man(312,-204,26,null)}
+  ctx.fillStyle='rgba(255,255,255,.28)';ctx.beginPath();ctx.moveTo(214,-246);ctx.lineTo(236,-246);ctx.lineTo(214,-205);ctx.closePath();ctx.fill();
+  ctx.restore();
+  ctx.fillStyle=C.redLo;ctx.fillRect(268,-248,10,72);                                               // coluna
+  ctx.strokeStyle=C.redLo;ctx.lineWidth=3;ctx.strokeRect(205,-178,165,0.1);
+  // portas e maçanetas
+  ctx.strokeStyle='rgba(0,0,0,.25)';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(273,-176);ctx.lineTo(273,-92);ctx.moveTo(366,-176);ctx.lineTo(370,-92);ctx.moveTo(204,-176);ctx.lineTo(202,-92);ctx.stroke();
+  ctx.fillStyle='#2D2A28';ctx.fillRect(250,-166,16,5);ctx.fillRect(340,-166,16,5);
+  // retrovisor
+  ctx.fillStyle='#2D2A28';rr(354,-200,20,24,4);ctx.fill();
+  // rack de teto
+  ctx.fillStyle='#2D2A28';ctx.fillRect(196,-282,150,9);for(const px of[206,250,296,336])ctx.fillRect(px,-274,6,13);
+  ctx.fillStyle='#6B4E33';rr(222,-298,74,16,3);ctx.fill();                                           // bagagem
+  // frente: farol quadrado, pisca, para-choque e quebra-mato
+  ctx.fillStyle='#FFF3C4';ctx.fillRect(520,-154,14,24);ctx.fillStyle='#F29B38';ctx.fillRect(520,-128,14,12);
+  ctx.fillStyle='#4A4643';ctx.fillRect(520,-112,26,40);
+  ctx.strokeStyle='#2F2C2A';ctx.lineWidth=7;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(548,-74);ctx.lineTo(548,-150);ctx.lineTo(530,-160);ctx.moveTo(548,-118);ctx.lineTo(522,-118);ctx.stroke();
+  ctx.fillStyle='#FFE58A';ctx.beginPath();ctx.arc(553,-132,7,0,7);ctx.fill();                       // farol auxiliar
+  ctx.lineCap='butt';
+  // traseira
+  ctx.fillStyle='#C8352F';ctx.fillRect(0,-146,8,22);ctx.fillStyle='#4A4643';ctx.fillRect(-6,-88,18,18);
+  // para-lamas e rodas
+  ctx.fillStyle='#2D2A28';ctx.beginPath();ctx.arc(110,-60,62,Math.PI,0);ctx.fill();ctx.beginPath();ctx.arc(440,-60,62,Math.PI,0);ctx.fill();
+  if(wave!=null){ // na chegada os dois se levantam na caçamba e acenam (só aparece acima da borda da caçamba)
+    ctx.save();ctx.beginPath();ctx.rect(-80,-700,760,550);ctx.clip();
+    woman(54,lerp(-110,-240,rise),35,wave+1.3);man(150,lerp(-108,-244,rise),35,wave);ctx.restore();}
+  ctx.restore();
+  wheel(110,-52,52,rot);wheel(440,-52,52,rot);
+  ctx.fillStyle='#2D2A28';ctx.fillRect(160,-58,12,34);                                              // apara-barro
+  ctx.restore();
+}
+
+/* ---- placa do topo ---- */
+function headSign(x,y,w,km,arrived,tipo){
+  const top=arrived?(tipo==='volta'?'FOMOS E VOLTAMOS DE':'CHEGAMOS A'):'RUMO A';
+  const s2=fit('ARACAJU',150,w-220,900),bA=y+86+s2*.86,line=bA+28,kmB=line+74,h=kmB-y+42;
+  ctx.save();ctx.shadowColor='rgba(43,36,32,.28)';ctx.shadowBlur=20;ctx.shadowOffsetY=8;ctx.fillStyle=C.green;rr(x,y,w,h,26);ctx.fill();ctx.restore();
+  ctx.strokeStyle=C.white;ctx.lineWidth=7;rr(x+14,y+14,w-28,h-28,16);ctx.stroke();
+  ctx.fillStyle=C.white;const s1=fit(top,42,w-120,800);ctx.font=`800 ${s1}px Overpass`;ctx.fillText(top,x+52,y+84);
+  ctx.font=`900 ${s2}px Overpass`;ctx.fillText('ARACAJU',x+46,bA);
+  ctx.font='800 38px Overpass';const sw=ctx.measureText('SE').width;ctx.lineWidth=4;rr(x+w-52-sw-26,bA-48,sw+26,54,8);ctx.stroke();ctx.fillText('SE',x+w-52-sw-13,bA-8);
+  ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x+46,line);ctx.lineTo(x+w-46,line);ctx.stroke();
+  const ax=x+52,ay=kmB-58;ctx.beginPath();ctx.moveTo(ax+24,ay);ctx.lineTo(ax+48,ay+28);ctx.lineTo(ax+34,ay+28);ctx.lineTo(ax+34,ay+56);ctx.lineTo(ax+14,ay+56);ctx.lineTo(ax+14,ay+28);ctx.lineTo(ax,ay+28);ctx.closePath();ctx.fill();
+  ctx.font='900 62px Overpass';const kt=Math.round(km).toLocaleString('pt-BR')+' km';ctx.fillText(kt,x+118,kmB);
+  const kw=ctx.measureText(kt).width;ctx.font='700 34px Overpass';ctx.fillText(arrived?'rodados':'e contando…',x+118+kw+14,kmB);
+  return y+h;
+}
+
+/* ---- quadro ---- */
+function frame(c,t,o){
+  ctx=c.getContext('2d');W=c.width;H=c.height;t=((t%DUR)+DUR)%DUR;
+  const story=H>1500, wx=worldX(t), p=clamp(wx/WEND,0,1), arrived=t>=DRIVE+STOP*.6;
+  const kmTotal=o.km||2140, km=kmTotal*clamp(wx/(V*DRIVE+V*STOP*.5),0,1);
+  // céu
+  const sg=ctx.createLinearGradient(0,0,0,H);sg.addColorStop(0,C.sky1);sg.addColorStop(.7,mix(C.sky2,'#F8C9A0',p));ctx.fillStyle=sg;ctx.fillRect(0,0,W,H);
+  const sunY=lerp(story?820:640,story?700:560,p);ctx.fillStyle='rgba(217,119,79,.18)';ctx.beginPath();ctx.arc(W*.78,sunY,150,0,7);ctx.fill();ctx.fillStyle=C.sun;ctx.beginPath();ctx.arc(W*.78,sunY,92,0,7);ctx.fill();
+  // nuvens
+  ctx.fillStyle='rgba(255,255,255,.8)';for(let i=0;i<4;i++){const cx=((i*420-wx*.05)%(W+400)+W+400)%(W+400)-200,cy=(story?640:480)+i%2*60;
+    ctx.beginPath();ctx.ellipse(cx,cy,90,26,0,0,7);ctx.ellipse(cx+50,cy-18,56,30,0,0,7);ctx.fill()}
+  const yG=story?1420:1010;                              // linha da estrada
+  // morros: verdes em Minas, secos no sertão, areia no litoral
+  const far=p<.5?mix('#A9BFA2','#CDB98C',p/.5):mix('#CDB98C','#E6CFA0',(p-.5)/.5);
+  hill(yG-260,90,.0032,1.3,wx*.12,far);
+  if(p>.72){ctx.globalAlpha=clamp((p-.72)/.15,0,1);ctx.fillStyle='#5FA8BF';ctx.fillRect(0,yG-150,W,60);ctx.fillStyle='#86C3D2';for(let x=0;x<W;x+=60)ctx.fillRect(((x-wx*.2)%W+W)%W,yG-140+(x%120?8:0),30,4);ctx.globalAlpha=1}
+  const mid=p<.5?mix('#7FA36E','#B9A86A',p/.5):mix('#B9A86A','#E9D3A2',(p-.5)/.5);
+  hill(yG-120,55,.005,4.2,wx*.35,mid);
+  // vegetação perto da estrada
+  for(let k=Math.floor((wx*.8-200)/230);k<(wx*.8+W+200)/230;k++){
+    const sx=k*230-wx*.8, rel=clamp((k*230/.8)/WEND,0,1.2), s=0.9+((k*37)%10)/25;
+    if(rel<.42)tree(sx,yG-6,s*1.2);else if(rel<.66)shrub(sx,yG-6,s);else palm(sx,yG-4,s*1.1,Math.sin(t*2+k)*4)}
+  // pista
+  const AH=story?260:170;
+  ctx.fillStyle=C.asph;ctx.fillRect(0,yG-10,W,AH);
+  ctx.fillStyle='#EDE6DA';ctx.fillRect(0,yG-6,W,5);ctx.fillRect(0,yG+AH-24,W,5);
+  ctx.fillStyle='#0A5A31';ctx.fillRect(0,yG-10+AH,W,H);
+  ctx.fillStyle=C.yel;const dy=yG+(story?120:76);for(let x=-((wx)%120);x<W;x+=120)ctx.fillRect(x,dy,64,9);
+  // placas das cidades
+  const KEND=V*DRIVE+V*STOP*.5, wAt=k=>KEND*k/2140+(story?520:470);
+  const signs=[[160,'GONÇALVES','MG'],[wAt(900),'MONTES CLAROS','MG'],[wAt(1570),'JEQUIÉ','BA']];
+  for(const[sx0,n,uf]of signs){const sx=sx0-wx;if(sx>-520&&sx<W+40)citySign(sx,yG-8,n,uf,1)}
+  // caminhonete
+  const tx=story?W*.16:W*.15, ts=story?1.42:1.3;
+  const waving=t>DRIVE+STOP*.4?(t-DRIVE)*7:null;
+  truck(tx,yG+(story?70:58),ts,t,waving,ease(clamp((t-DRIVE-STOP*.4)/.45,0,1)));
+  // balão de chegada
+  if(arrived){const a=clamp((t-DRIVE-STOP*.6)/.35,0,1),bx=tx+ts*420,by=yG-(story?520:470);
+    ctx.save();ctx.globalAlpha=a;ctx.translate(bx,by);ctx.scale(.7+.3*ease(a),.7+.3*ease(a));
+    ctx.fillStyle=C.cream;ctx.strokeStyle=C.ink;ctx.lineWidth=5;rr(-170,-70,340,110,30);ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.moveTo(-60,40);ctx.lineTo(-100,92);ctx.lineTo(-10,40);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle=C.cream;ctx.fillRect(-70,32,70,12);
+    ctx.fillStyle=C.ink;ctx.textAlign='center';ctx.font='900 56px Overpass';ctx.fillText('Chegamos!',0,4);ctx.textAlign='left';ctx.restore();
+    // confete
+    for(let i=0;i<40;i++){const ph=(t-DRIVE-STOP*.6)*1.2,xx=(i*97)%W,yy=((i*53)%400)+ph*320-200;if(yy>0&&yy<yG){ctx.fillStyle=[C.yel,C.sun,'#4F8F55',C.white][i%4];ctx.save();ctx.translate(xx,yy+(story?300:200));ctx.rotate(i+ph*4);ctx.fillRect(-7,-4,14,8);ctx.restore()}}
+  }
+  // placa do topo
+  headSign(story?60:50,story?110:40,story?960:980,km,arrived,o.tipo);
+  // rodapé: barra de progresso da rota
+  const by0=story?1735:1222, stops=['Gonçalves','Montes Claros','Jequié','Aracaju'], xs=[0,900,1570,2140].map(k=>120+840*k/2140);
+  ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=8;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(120,by0);ctx.lineTo(960,by0);ctx.stroke();
+  const px=lerp(120,960,clamp(km/kmTotal,0,1));ctx.strokeStyle=C.yel;ctx.beginPath();ctx.moveTo(120,by0);ctx.lineTo(px,by0);ctx.stroke();ctx.lineCap='butt';
+  stops.forEach((n,i)=>{const on=px>=xs[i]-2;ctx.fillStyle=on?C.yel:'#8E8A85';ctx.beginPath();ctx.arc(xs[i],by0,i===3?18:13,0,7);ctx.fill();
+    ctx.fillStyle=C.white;ctx.textAlign='center';ctx.font=`800 ${i===3?(story?32:28):(story?26:23)}px Overpass`;ctx.fillText(n,xs[i],by0+(story?50:42))});
+  ctx.fillStyle=C.yel;ctx.beginPath();ctx.arc(px,by0,9,0,7);ctx.fill();
+  ctx.fillStyle='#EDE6DA';ctx.font=`700 ${story?30:26}px Overpass`;ctx.fillText(o.leg||'Pé na estrada · Gonçalves/MG → Aracaju/SE',W/2,story?1870:1326);ctx.textAlign='left';
+}
+return{frame,DUR};
+})();
+
+</script>
 <script>
 (function(){
 "use strict";
@@ -520,19 +910,23 @@ const CHECKS={
  volta:["Hotéis da volta reservados (Jequié e Montes Claros)","Pneus recalibrados e nível do óleo conferido","Cooler reabastecido","Pagamento dos pedágios free flow da ida conferido","Waze e boletins da PRF conferidos na véspera"]};
 
 /* Estado salvo: v = valores, c = caixas marcadas, n = notas, sc = cenário de pedágio por perna */
-let state={v:{},c:{},n:{},sc:{ida:"nov",volta:"nov"}};
+let state={v:{},c:{},n:{},log:[],sc:{ida:"nov",volta:"nov"}};
 function normalize(d){d=d&&typeof d==='object'?d:{};
   let sc=d.sc;if(typeof sc==='string')sc={ida:sc,volta:sc};sc=sc&&typeof sc==='object'?sc:{};
-  return{v:Object.assign({},d.v),c:Object.assign({},d.c),n:Object.assign({},d.n),
+  const v={};for(const[k,x]of Object.entries(d.v||{}))if(typeof x==='number'&&isFinite(x)&&x>=0)v[k]=x;
+  const log=(Array.isArray(d.log)?d.log:[]).filter(x=>x&&typeof x.id==='string'&&typeof x.k==='string'&&x.n>=1&&x.n<=6).slice(-300);
+  return{v,c:Object.assign({},d.c),n:Object.assign({},d.n),log,
     sc:{ida:sc.ida==='dez'?'dez':'nov',volta:sc.volta==='dez'?'dez':'nov'}}}
 try{state=normalize(JSON.parse(localStorage.getItem('rumo-aracaju')||'null'))}catch(e){}
 let ui={leg:"ida"};
 try{const l=localStorage.getItem('rumo-aracaju-aba');if(l==='volta')ui.leg='volta'}catch(e){}
 
 const parse=s=>{s=String(s==null?'':s).trim().replace(/[r$\s]/gi,'');if(!s)return NaN;
+  if(!/^\d+([.,]\d+)?$|^\d{1,3}(\.\d{3})+(,\d+)?$/.test(s))return NaN;
   if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');
   else if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,'');
-  const x=Number(s);return x>=0?x:NaN};
+  const x=Number(s);return x>=0?Math.round(x*100)/100:NaN};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const val=k=>{const x=state.v[k];return typeof x==='number'&&isFinite(x)?x:NaN};
 const show=x=>isFinite(x)?String(x).replace('.',','):'';
 
@@ -559,8 +953,8 @@ function dayHTML(d){
         <table><thead><tr><th>Item</th><th>Previsto</th><th>Gastei (R$)</th></tr></thead><tbody>${rows}</tbody>
           <tfoot><tr><td>Total</td><td class="est" id="estT${d.n}"></td><td class="num" id="realT${d.n}">R$ 0,00</td></tr></tfoot></table>
         <div class="odo">
-          <label for="d${d.n}_odo1">Hodômetro na saída<input class="money" id="d${d.n}_odo1" data-k="d${d.n}_odo1" inputmode="decimal" autocomplete="off" placeholder="km"></label>
-          <label for="d${d.n}_odo2">Hodômetro na chegada<input class="money" id="d${d.n}_odo2" data-k="d${d.n}_odo2" inputmode="decimal" autocomplete="off" placeholder="km"></label>
+          <label for="d${d.n}_odo1">Km do painel na saída<input class="money" id="d${d.n}_odo1" data-k="d${d.n}_odo1" inputmode="decimal" autocomplete="off" placeholder="km"></label>
+          <label for="d${d.n}_odo2">Km do painel na chegada<input class="money" id="d${d.n}_odo2" data-k="d${d.n}_odo2" inputmode="decimal" autocomplete="off" placeholder="km"></label>
           <label for="d${d.n}_lit">Litros abastecidos<input class="money" id="d${d.n}_lit" data-k="d${d.n}_lit" inputmode="decimal" autocomplete="off" placeholder="L"></label>
         </div>
         <div class="consumo"><span>Rodei: <b id="kmr${d.n}">—</b></span><span>Consumo aprox.: <b id="cons${d.n}">—</b></span></div>
@@ -623,8 +1017,8 @@ function recompute(){
   $('t-real-sub').textContent=!filled?'nenhum valor anotado':(tReal>tMax?'acima do estimado em '+fmt(tReal-tMax):`${filled} ${filled===1?'item anotado':'itens anotados'}`);
   $('t-cons').textContent=litT?NUM.format(kmT/litT)+' km/l':'— km/l';
   $('t-cons-sub').textContent=litT?`${NUM.format(kmT)} km com ${NUM.format(litT)} L (previsto: 8)`:'anote hodômetro e litros';
-  $('legs-body').innerHTML=['ida','volta'].map(k=>{const g=leg[k];return `<tr><td>${k==='ida'?'Ida':'Volta'}</td><td>${fmt(g.min)}–${short(g.max+g.res)}</td><td>${fmt(g.real)}</td></tr>`}).join('')+
-    `<tr class="tot"><td>Total</td><td>${fmt(tMin)}–${short(tMax)}</td><td>${fmt(tReal)}</td></tr>`;
+  $('legs-body').innerHTML=['ida','volta'].map(k=>{const g=leg[k];return `<tr><td>${k==='ida'?'Ida':'Volta'}</td><td>${fmt(g.min)}–<wbr>${short(g.max+g.res)}</td><td>${fmt(g.real)}</td></tr>`}).join('')+
+    `<tr class="tot"><td>Total</td><td>${fmt(tMin)}–<wbr>${short(tMax)}</td><td>${fmt(tReal)}</td></tr>`;
   $('plane-car').textContent=fmt(tMin)+' a '+short(tMax);
   const scale=Math.max(1,...CATS.map(([k])=>Math.max(cat[k].e,cat[k].r)));
   for(const[k,l]of CATS){const e=cat[k].e,r=cat[k].r,B=BARS[k];
@@ -633,7 +1027,8 @@ function recompute(){
   stepEls.forEach(li=>li.classList.toggle('done',!!state.c[li.dataset.step]));
   $('chk-count').textContent=`${checkKeys.filter(k=>state.c[k]).length} de ${checkKeys.length} conferidos`;
   $('m-real').textContent=fmt(tReal);
-  $('m-sub').textContent='estimado até '+fmt(tMax);
+  $('m-sub').textContent='previsto até '+fmt(tMax);
+  if(typeof updatePremio==='function')updatePremio();
 }
 
 /* Abas Ida / Volta */
@@ -654,36 +1049,407 @@ const sync=$('sync');
 function setSync(cls,txt){sync.className='pill '+cls;sync.lastElementChild.textContent=txt}
 let ref=null,timer=null,writing=false,pending=false,rafId=0;
 function saveLocal(){try{localStorage.setItem('rumo-aracaju',JSON.stringify(state))}catch(e){}}
-function setDirty(on){try{on?localStorage.setItem('rumo-aracaju-dirty','1'):localStorage.removeItem('rumo-aracaju-dirty')}catch(e){}}
-function isDirty(){try{return localStorage.getItem('rumo-aracaju-dirty')==='1'}catch(e){return false}}
+/* "touched" = o que mudou neste aparelho e ainda não foi gravado na página; serve para juntar com o que veio de outro aparelho */
+let touched=new Set(),ver=0;
+try{touched=new Set(JSON.parse(localStorage.getItem('rumo-aracaju-touched')||'[]'))}catch(e){}
+function saveTouched(){try{touched.size?localStorage.setItem('rumo-aracaju-touched',JSON.stringify([...touched])):localStorage.removeItem('rumo-aracaju-touched')}catch(e){}}
+function touch(k){}
+function mergeRemote(remote){
+  const r=normalize(remote);
+  for(const t of touched){const i=t.indexOf(':'),kind=t.slice(0,i),k=t.slice(i+1);
+    if(kind==='v'||kind==='c'||kind==='n'){if(Object.prototype.hasOwnProperty.call(state[kind],k))r[kind][k]=state[kind][k];else delete r[kind][k]}
+    else if(kind==='sc')r.sc[k]=state.sc[k];
+    else if(kind==='logdel')r.log=r.log.filter(x=>x.id!==k)}
+  const ids=new Set(r.log.map(x=>x.id));
+  for(const L of state.log)if(touched.has('logadd:'+L.id)&&!touched.has('logdel:'+L.id)&&!ids.has(L.id))r.log.push(L);
+  r.log.sort((a,b)=>(a.ts||0)-(b.ts||0));r.log=r.log.slice(-300);
+  return r;
+}
+/* Gravação simultânea em dois aparelhos: quem grava por último sobrescreve a página inteira.
+   Cada gravação leva quem gravou (dev, seq) e até onde ele já tinha visto dos outros (seen).
+   Se chegar uma gravação de outro aparelho que não tinha visto as nossas, o que gravamos e sumiu é gravado de novo. */
+let dev='';try{dev=localStorage.getItem('rumo-aracaju-dev')||''}catch(e){}
+if(!dev){dev=Math.random().toString(36).slice(2,10);try{localStorage.setItem('rumo-aracaju-dev',dev)}catch(e){}}
+let seen={},mine=[],queued=null,lastSeq=0;
+function differs(t,r){const i=t.indexOf(':'),kind=t.slice(0,i),k=t.slice(i+1),own=(o,x)=>Object.prototype.hasOwnProperty.call(o,x);
+  if(kind==='v'||kind==='c'||kind==='n'){const a=own(state[kind],k);return a!==own(r[kind],k)||(a&&state[kind][k]!==r[kind][k])}
+  if(kind==='sc')return state.sc[k]!==r.sc[k];
+  if(kind==='logadd')return state.log.some(x=>x.id===k)&&!r.log.some(x=>x.id===k);
+  if(kind==='logdel')return r.log.some(x=>x.id===k);
+  return false}
+function applyRemote(data){
+  const m=data&&data.meta&&typeof data.meta==='object'?data.meta:{};
+  if(m.dev&&m.dev!==dev){
+    const sm=m.seen&&typeof m.seen==='object'?m.seen:{},got=Number(sm[dev])||0,r=normalize(data);
+    for(const w of mine)if(w.seq>got)for(const t of w.keys)if(differs(t,r))touched.add(t);
+    saveTouched();
+    for(const[d,q]of Object.entries(sm))if(d!==dev&&Number(q)>(seen[d]||0))seen[d]=Number(q);
+    if(Number(m.seq)>(seen[m.dev]||0))seen[m.dev]=Number(m.seq);
+  }
+  state=mergeRemote(data);saveLocal();fillInputs();recompute();renderRecent();
+  if(touched.size){if(!timer)timer=setTimeout(flush,300)}else setSync('ok','Tudo salvo')}
 async function flush(){
   clearTimeout(timer);timer=null;
   if(!ref)return;
   if(writing){pending=true;return}
   writing=true;setSync('wait','Salvando…');
-  let ok=false;
-  try{await ref.set(JSON.parse(JSON.stringify(state)));ok=true}catch(e){}
+  const v0=ver,seq=lastSeq=Math.max(Date.now(),lastSeq+1),keys=[...touched];let ok=false;
+  const sv=Object.fromEntries(Object.entries(seen).sort((a,b)=>b[1]-a[1]).slice(0,8));
+  try{await ref.set(Object.assign(JSON.parse(JSON.stringify(state)),{meta:{dev,seq,seen:sv}}));ok=true}catch(e){}
   writing=false;
   if(pending){pending=false;flush();return}
-  if(ok){setDirty(false);setSync('ok','Tudo salvo')}
+  if(ok){mine.push({seq,keys});const old=Date.now()-120000;mine=mine.filter(w=>w.seq>old).slice(-30);
+    if(ver===v0&&!timer){touched.clear();saveTouched();setSync('ok','Tudo salvo')}}
   else{setSync('off','Sem internet: salvo neste celular');timer=setTimeout(flush,5000)}
+  if(queued){const d=queued;queued=null;applyRemote(d)}
 }
 function schedule(){cancelAnimationFrame(rafId);rafId=requestAnimationFrame(recompute)}
-function changed(){saveLocal();schedule();setSync('ok','Salvo neste celular')}
+function changed(){ver++;saveLocal();schedule();clearTimeout(timer);
+  setSync('ok','Salvo neste celular')}
 document.addEventListener('input',e=>{const t=e.target;
-  if(t.dataset.k){const x=parse(t.value);if(isFinite(x))state.v[t.dataset.k]=x;else delete state.v[t.dataset.k];changed()}
-  else if(t.dataset.n!==undefined){state.n[t.dataset.n]=t.value;changed()}});
-document.addEventListener('change',e=>{const t=e.target;if(t.dataset.c){state.c[t.dataset.c]=t.checked;changed()}});
+  if(t.dataset.k){const x=parse(t.value);if(isFinite(x))state.v[t.dataset.k]=x;else delete state.v[t.dataset.k];touch('v:'+t.dataset.k);changed()}
+  else if(t.dataset.n!==undefined){state.n[t.dataset.n]=t.value;touch('n:'+t.dataset.n);changed()}});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.c){state.c[t.dataset.c]=t.checked;touch('c:'+t.dataset.c);changed()}});
 document.addEventListener('focusout',e=>{const t=e.target;if(t.dataset&&t.dataset.k)t.value=show(val(t.dataset.k))});
-scBtns.forEach(b=>b.addEventListener('click',()=>{const[l,s]=b.dataset.sc.split(':');if(state.sc[l]!==s){state.sc[l]=s;changed()}}));
+scBtns.forEach(b=>b.addEventListener('click',()=>{const[l,s]=b.dataset.sc.split(':');if(state.sc[l]!==s){state.sc[l]=s;touch('sc:'+l);changed()}}));
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&timer)flush()});
 
+/* ===== Entende frases como "almoço 85" ou "abasteci 320 reais e 45 litros" ===== */
+/* ===== Entende frases como "almoço 85" ou "abasteci 320 reais e 45 litros" (v2) ===== */
+const SPEAK=(function(){
+const strip=t=>t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const UN={zero:0,um:1,uma:1,dois:2,duas:2,tres:3,quatro:4,cinco:5,seis:6,sete:7,oito:8,nove:9,dez:10,onze:11,doze:12,treze:13,quatorze:14,catorze:14,quinze:15,dezesseis:16,dezessete:17,dezoito:18,dezenove:19,vinte:20,trinta:30,quarenta:40,cinquenta:50,sessenta:60,setenta:70,oitenta:80,noventa:90,cem:100,cento:100,duzentos:200,duzentas:200,trezentos:300,trezentas:300,quatrocentos:400,quatrocentas:400,quinhentos:500,quinhentas:500,seiscentos:600,seiscentas:600,setecentos:700,setecentas:700,oitocentos:800,oitocentas:800,novecentos:900,novecentas:900,mil:1000};
+const CATS=[
+ ['diesel',/^(diesel|combustivel|gasolina|etanol|alcool|abastec\w*|s10|arla)$/],
+ ['ped',/^(pedagios?|tag|freeflow|porticos?)$/],
+ ['hotel',/^(hotel|hoteis|pousadas?|hosped\w*|diarias?|pernoites?|quartos?|motel|dormimos|dormida)$/],
+ ['alim',/^(almoc\w*|jant\w*|cafes?|cafezinhos?|lanch\w*|comida|comi|comemos|restaurantes?|lanchonetes?|padarias?|aguas?|refrigerantes?|sorvetes?|marmit\w*|self|buffet|pastel|pasteis|salgad\w*|coxinhas?|refeic\w*|bebidas?|sucos?|frutas?|biscoitos?|bolachas?|pao|paes|cervejas?|picoles?|sobremesas?|doces?|acai|tapioca|pizza|churrasco)$/],
+ ['outros',/^(estacion\w*|mercado|supermercado|borracharia|pneus?|oleo|lavagem|lavajato|farmacia|remedios?|mecanico|oficina|guincho|souvenirs?|lembranc\w*|banheiro|gorjeta|presentes?|calibragem|outros|outras|diversos)$/]];
+const WEAK=/^(posto|tanque)$/;
+const QN=/^(cafes|cafezinhos|aguas|almocos|jantares|jantas|lanches|pedagios|pracas|diarias|noites|pessoas|refrigerantes|sorvetes|pasteis|salgados|coxinhas|sucos|cervejas|garrafas|garrafinhas|refeicoes|marmitas|quartos|paes|picoles|latas|latinhas|unidades|vezes|pratos|porcoes)$/;
+const MONEYU=/^(reais|real|conto|contos|pila)$/, LIT=/^(l|lt|lts|litro|litros)$/, KM=/^(km|kms|quilometros?)$/, HR=/^(h|hs|hr|hrs|hora|horas)$/;
+const PREP=/^(de|do|da|dos|das|no|na|nos|nas|em|com|pro|pra|pelo|pela)$/, ART=/^(o|a|os|as|um|uma)$/;
+const MES=/^(janeiro|fevereiro|marco|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro)$/;
+const ODOK=/^(hodometro|odometro|quilometragem|kilometragem|marcador|painel)$/;
+const SAI=/^(sai\w*|comec\w*|partida|partimos|inicio|largamos)$/, CHE=/^(cheg\w*|final|fim|termin\w*)$/;
+const FIX=/^(nao|digo|alias|corrigindo)$/, APROX=/^(poucos?|tantos?|pouquinho|quebrados?)$/;
+const ORD={primeiro:1,segundo:2,terceiro:3};
+function catOfWord(w,weak){for(const[c,re]of CATS)if(re.test(w))return c;return weak&&WEAK.test(w)?'diesel':null}
+function numOf(w){
+  if(/^\d{1,3}(\.\d{3})+(,\d{1,2})?$/.test(w))return{v:Number(w.replace(/\./g,'').replace(',','.')),dig:1,dec:/,/.test(w)};
+  if(/^\d+([.,]\d{1,2})?$/.test(w))return{v:Number(w.replace(',','.')),dig:1,dec:/[.,]/.test(w),len:w.length};
+  if(w in UN&&w!=='zero')return{v:UN[w],dig:0,dec:false};
+  return null;
+}
+/* junta "cento e vinte e cinco", "duzentos e 50", "1 mil e duzentos", "45 mil 678" */
+function compose(ws){
+  const out=[];
+  for(let i=0;i<ws.length;){
+    const a=numOf(ws[i]);
+    if(!a){out.push({w:ws[i]});i++;continue}
+    if(!a.dig&&(ws[i]==='um'||ws[i]==='uma')&&!(numOf(ws[i+1]||'')&&ws[i+1]==='mil')){out.push({w:ws[i]});i++;continue}
+    let total=0,cur=0,last=a,place,j=i,terms=1,anyWord=!a.dig;
+    if(a.v===1000&&!a.dig){total=1000;place=1000}else{cur=a.v;place=a.v>=100?100:a.v>=10?10:1}
+    while(!a.dec){
+      let k=j+1,viaE=false;
+      if(ws[k]==='e'){viaE=true;k++}
+      const b=numOf(ws[k]||'');if(!b||b.dec)break;
+      const isMil=!b.dig&&b.v===1000;
+      if(isMil){if(viaE||total||cur>=1000)break;total=(cur||1)*1000;cur=0;place=1000}
+      else{
+        if(!viaE&&!(last.v===1000&&!last.dig))break;
+        if(viaE&&last.dig&&b.dig)break;
+        if(b.v>=place)break;
+        cur+=b.v;place=b.v>=100?100:b.v>=10?10:1;
+      }
+      last=b;j=k;terms++;if(!b.dig)anyWord=true;
+    }
+    const v=a.dec?a.v:total+cur;
+    out.push({n:v,dec:a.dec,two:!a.dec&&v>=10&&v<=99&&(anyWord||a.len===2),raw:ws.slice(i,j+1).join(' ')});
+    i=j+1;
+  }
+  return out;
+}
+function parse(text,currentDay){
+  let t=' '+strip(String(text||''))+' ';
+  t=t.replace(/r\s?\$/g,' ')
+   .replace(/(\d)\s*[ºª°o]\s+dia\b/g,' dia $1 ').replace(/\b(primeiro|segundo|terceiro)\s+dia\b/g,(m,o)=>' dia '+ORD[o]+' ')
+   .replace(/\b(meio|bom)\s+dia\b|\bmeia\s+noite\b/g,' ')
+   .replace(/(\(?\b\d{2}\)?\s*)?\b\d{4,5}-\d{4}\b/g,' ')                 // telefone
+   .replace(/\b\d{1,2}(:\d{2}|h\d{2})\b/g,' ')                            // 12:30, 12h30
+   .replace(/\b\d{1,2}\/\d{1,2}(\/\d{2,4})?\b/g,' ')                      // 15/11
+   .replace(/\b(br|mg|ba|sp|se|rj|rod|rodovia)\s*-?\s*\d{2,3}\b/g,' ')    // BR-116
+   .replace(/\bsem\s+parar\b/g,' tag ').replace(/\bfree\s*flow\b/g,' freeflow ').replace(/\blava\s*-?\s*jato\b/g,' lavajato ').replace(/\bs\s*-?\s*10\b/g,' s10 ')
+   .replace(/\bquer\s+dizer\b|\bou\s+melhor\b|\bna\s+verdade\b/g,' digo ')
+   .replace(/(\d)(litros?|lts?|l|kms?|hs?|horas?)\b/g,'$1 $2')
+   .replace(/[!?;:"()]/g,' ');
+  const ws=t.split(/\s+/).map(w=>w.replace(/^[.,\-]+|[.,\-]+$/g,'')).filter(Boolean);
+  const T=compose(ws);
+  const isN=i=>T[i]&&T[i].n!==undefined&&!T[i].drop, W=i=>T[i]&&T[i].w||'';
+  const hasStrong=T.some(x=>x.w&&catOfWord(x.w,false));
+  const kw=i=>T[i]&&T[i].w?catOfWord(T[i].w,!hasStrong):null;
+  // cat que vem logo depois do número: "15 de água", "70 no pedágio"
+  function catAfter(i,loose){let k=i+1,p=false;while(MONEYU.test(W(k))){k++;p=true}if(PREP.test(W(k))){k++;p=true;if(ART.test(W(k)))k++}const c=kw(k);return c&&(p||loose)?{c,k}:null}
+  function kwBefore(i){for(let k=i-1;k>=0&&!isN(k);k--)if(kw(k))return true;return false}
+  // centavos: "3 e 70", "85 reais e 50", "3 com 70", "85 reais 50", "50 centavos"
+  for(let i=0;i<T.length;i++){
+    if(!isN(i)||T[i].dec)continue;
+    let k=i+1,r=false;if(MONEYU.test(W(k))){k++;r=true}
+    const conn=/^(e|com)$/.test(W(k));if(conn)k++;
+    if((conn||r)&&isN(k)&&!T[k].dec&&T[k].n<100&&(T[k].two||W(k+1).startsWith('centavo'))){
+      const cent=W(k+1).startsWith('centavo'), nx=W(k+1);
+      const bad=!cent&&(LIT.test(nx)||KM.test(nx)||HR.test(nx)||QN.test(nx)||isN(k+1)||(nx==='e'&&APROX.test(W(k+2)))||(catAfter(k,1)&&(kwBefore(i)||!conn))||(conn&&kwBefore(i)&&PREP.test(nx)));
+      if(cent||!bad){T[i].n=Math.round((T[i].n+T[k].n/100)*100)/100;T[i].dec=true;for(let x=i+1;x<=k+(cent?1:0);x++)T[x].drop=true;continue}
+    }
+    if(W(i+1).startsWith('centavo')){T[i].n=T[i].n/100;T[i].dec=true;T[i+1].drop=true}
+  }
+  // dia da viagem
+  let day=currentDay,leg=null,idx=null;const legStart=currentDay>3?4:1;
+  for(let i=0;i<T.length;i++){const w=W(i);
+    if(/^(ida)$/.test(w))leg='ida';else if(/^(volta|voltando|retorno)$/.test(w))leg='volta';
+    if(w==='dia'&&isN(i+1)&&!T[i+1].dec&&T[i+1].n<=31){const n=T[i+1].n;T[i+1].drop=true;
+      if(!(W(i+2)==='de'&&MES.test(W(i+3)))&&n>=1&&n<=3)idx=n}}
+  if(idx){const L=leg||(currentDay>3?'volta':'ida');day=L==='ida'?idx:idx+3}
+  else if(leg){const i=currentDay>3?currentDay-3:currentDay;day=leg==='ida'?i:i+3}
+  else if(ws.includes('anteontem'))day=Math.max(legStart,currentDay-2);
+  else if(ws.includes('ontem'))day=Math.max(legStart,currentDay-1);
+  // números que não são dinheiro: horários, datas, aproximados, km de estrada, pessoas
+  for(let i=0;i<T.length;i++){if(!isN(i))continue;const n=T[i].n,nx=W(i+1),pv=W(i-1);
+    if(HR.test(nx)||(pv==='as'&&n<=24&&!T[i].dec)||(nx==='da'&&/^(manha|tarde|noite)$/.test(W(i+2)))||(nx==='de'&&MES.test(W(i+2))))T[i].drop=true;
+    else if(nx==='e'&&APROX.test(W(i+2)))T[i].drop=true;
+    else if(/^(pra|para|nos|nois|somos|em)$/.test(pv)&&!T[i].dec&&n<=20&&!MONEYU.test(nx))T[i].drop=true;
+  }
+  const items=[];
+  // hodômetro
+  function which(i){
+    for(let k=i-1;k>=Math.max(0,i-6);k--){if(k<i-1&&isN(k))break;const w=W(k);if(SAI.test(w))return'odo1';if(CHE.test(w))return'odo2'}
+    for(let k=i+1;k<=Math.min(T.length-1,i+3);k++){const w=W(k);if(w==='e'||isN(k))break;if(SAI.test(w))return'odo1';if(CHE.test(w))return'odo2'}
+    return'auto'}
+  for(let i=0;i<T.length;i++){
+    if(ODOK.test(W(i)))for(let k=i+1;k<=i+5&&k<T.length;k++){if(isN(k)&&T[k].n>=100){T[k].odo=true;break}}
+    if(W(i)&&KM.test(W(i))&&isN(i+1)&&!ODOK.test(W(i-1)))T[i+1].drop=true;                  // "km 450"
+    if(isN(i)&&KM.test(W(i+1))){if(T[i].n>=5000)T[i].odo=true;else T[i].drop=true}         // "650 km"
+    if(isN(i)&&T[i].n>=10000&&!MONEYU.test(W(i+1)))T[i].odo=true;
+  }
+  for(let i=0;i<T.length;i++)if(isN(i)&&T[i].odo){items.push({kind:'odo',which:which(i),val:T[i].n});T[i].drop=true}
+  // litros e preço por litro
+  let lit=0,ppl=null;
+  for(let i=0;i<T.length;i++){if(!isN(i))continue;const nx=W(i+1);
+    if((/^(o|por|cada)$/.test(nx)&&W(i+2)==='litro')||(W(i-1)==='a'&&W(i-2)==='litro')){ppl=T[i].n;T[i].drop=true}
+    else if(LIT.test(nx)){items.push({kind:'lit',val:T[i].n});lit+=T[i].n;T[i].drop=true}}
+  // quantidade: "2 cafés 18", "3 pedágios de 3,70"
+  for(let i=0;i<T.length;i++){if(!isN(i)||T[i].dec||T[i].n>20||T[i].n<1)continue;
+    if(QN.test(W(i+1))){let k=i+2;
+      if(W(i+1)==='vezes'&&isN(k))T[k].n=Math.round(T[k].n*T[i].n*100)/100;
+      else if(/^(de|a|por)$/.test(W(k))&&isN(k+1))T[k+1].n=Math.round(T[k+1].n*T[i].n*100)/100;
+      else{let more=false;for(let x=0;x<T.length;x++)if(x!==i&&isN(x))more=true;if(!more)continue}
+      T[i].drop=true}}
+  // dinheiro + categoria
+  const used=new Set();let fixPending=false;const money=[];
+  for(let i=0;i<T.length;i++){
+    if(T[i].w&&FIX.test(T[i].w)){fixPending=true;continue}
+    if(!isN(i)||!(T[i].n>0))continue;
+    if(fixPending&&money.length){const p=money.pop();if(p.k!=null)used.delete(p.k)}
+    fixPending=false;
+    let cat=null,ck=null;const a=catAfter(i,!kwBefore(i));
+    if(a&&!used.has(a.k)){cat=a.c;ck=a.k}
+    if(!cat){for(let k=i-1;k>=0;k--){if(kw(k)){if(!used.has(k)){cat=kw(k);ck=k}break}}}
+    if(!cat)for(let k=i+1;k<=i+2;k++)if(kw(k)&&!used.has(k)){cat=kw(k);ck=k;break}
+    if(!cat)for(let k=i-1;k>=0;k--)if(kw(k)){cat=kw(k);break}
+    if(!cat)for(let k=i+1;k<T.length;k++)if(kw(k)&&!used.has(k)){cat=kw(k);ck=k;break}
+    if(!cat&&(lit||ppl))cat='diesel';
+    if(ck!=null)used.add(ck);
+    money.push({cat,val:Math.round(T[i].n*100)/100,k:ck});
+  }
+  if(!money.length&&lit&&ppl)money.push({cat:'diesel',val:Math.round(lit*ppl*100)/100});
+  for(const m of money)items.push({kind:'money',cat:m.cat,val:m.val});
+  return{day,items};
+}
+return{parse,strip};
+})();
+
+const VOICE=true;
+const CATNAME={diesel:'Diesel',ped:'Pedágio',hotel:'Hospedagem',alim:'Alimentação',outros:'Outros'};
+const dayLbl=n=>{const d=DAYS.find(x=>x.n===n);return d?(d.leg==='ida'?'Ida':'Volta')+', dia '+d.i:'—'};
+let curDay=1;try{const x=Number(localStorage.getItem('rumo-aracaju-dia'));if(x>=1&&x<=6)curDay=x}catch(e){}
+const dp=$('daypick');
+dp.innerHTML=DAYS.map(d=>`<button type="button" role="radio" data-day="${d.n}">${d.leg==='ida'?'Ida':'Volta'} · dia ${d.i}<small>${d.from} → ${d.to}</small></button>`).join('');
+function setDay(n){curDay=n;try{localStorage.setItem('rumo-aracaju-dia',String(n))}catch(e){}
+  dp.querySelectorAll('button').forEach(b=>{const on=Number(b.dataset.day)===n;b.setAttribute('aria-checked',String(on));b.tabIndex=on?0:-1})}
+dp.addEventListener('click',e=>{const b=e.target.closest('[data-day]');if(!b)return;setDay(Number(b.dataset.day));
+  if(pend&&!cf.hidden){pend.day=curDay;pend.moved=false;showConfirm()}});
+setDay(curDay);
+const cf=$('confirm'),msg=$('speak-msg'),sin=$('speak-in');
+let pend=null;
+function say(t,err){msg.textContent=t;msg.className='speak-msg'+(err?' err':'')}
+function bringIntoView(el,block){el.scrollIntoView({behavior:smooth()?'smooth':'auto',block:block||'center'})}
+function itemLine(it){
+  if(it.kind==='money')return (it.cat?CATNAME[it.cat]:'Gasto')+': '+fmt(it.val);
+  if(it.kind==='lit')return 'Litros abastecidos: '+NUM.format(it.val)+' L';
+  return (it.which==='odo2'?'Km do painel na chegada':(it.which==='odo1'?'Km do painel na saída':'Km do painel'))+': '+NUM.format(it.val)+' km';
+}
+function showConfirm(){
+  const ready=pend.items.every(i=>i.kind!=='money'||i.cat);
+  cf.innerHTML=`<h3>Entendi assim. Está certo?</h3>
+    <p class="cday">📅 Vai para: <b>${dayLbl(pend.day)}</b>${pend.moved?' <span class="moved">(mudei o dia pelo que você escreveu)</span>':''}</p>`+
+    pend.items.map((it,ix)=>{
+      const open=it.kind==='money'&&(!it.cat||it.pick);
+      return `<div class="citem"><span class="big-line">${itemLine(it)}</span>${it.kind!=='money'?'':
+        (open?`${it.cat?'<p><b>Escolha o tipo certo:</b></p>':'<p><b>Com o que foi esse gasto?</b> Toque em uma opção:</p>'}<div class="catpick">${Object.entries(CATNAME).map(([k,l])=>`<button type="button" data-ix="${ix}" data-cat="${k}" aria-pressed="${it.cat===k}">${l}</button>`).join('')}</div>`
+        :`<button type="button" class="linkbtn" data-ix="${ix}" data-change="1">Trocar o tipo de gasto</button>`)}</div>`}).join('')+
+    `<div class="confirm-actions"><button type="button" class="btn btn-big" id="cf-ok" ${ready?'':'disabled'}>${ready?'Sim, anotar':'Escolha o tipo acima'}</button><button type="button" class="btn ghost btn-big" id="cf-no">Não, apagar</button></div>`;
+  cf.hidden=false;
+}
+cf.addEventListener('click',e=>{
+  const c=e.target.closest('[data-cat]');
+  if(c){const it=pend.items[Number(c.dataset.ix)];it.cat=c.dataset.cat;it.pick=false;showConfirm();bringIntoView($('cf-ok'),'center');return}
+  const ch=e.target.closest('[data-change]');
+  if(ch){pend.items[Number(ch.dataset.ix)].pick=true;showConfirm();return}
+  if(e.target.id==='cf-no'){pend=null;cf.hidden=true;say('Apagado. Pode escrever de novo.');sin.focus();return}
+  if(e.target.id==='cf-ok'&&pend)commit();
+});
+function addTo(key,v){const prev=val(key);state.v[key]=Math.round(((isFinite(prev)?prev:0)+v)*100)/100}
+function commit(){
+  const n=pend.day,done=[];
+  for(const it of pend.items){
+    const id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    if(it.kind==='money'){const k=`d${n}_${it.cat}`;addTo(k,it.val);touch('v:'+k);touch('logadd:'+id);state.log.push({id,n,k,add:it.val,t:itemLine(it),ts:Date.now()})}
+    else if(it.kind==='lit'){const k=`d${n}_lit`;addTo(k,it.val);touch('v:'+k);touch('logadd:'+id);state.log.push({id,n,k,add:it.val,t:itemLine(it),ts:Date.now()})}
+    else{let w=it.which;if(w==='auto')w=isFinite(val(`d${n}_odo1`))?'odo2':'odo1';it.which=w;const k=`d${n}_${w}`;const prev=val(k);
+      state.v[k]=it.val;touch('v:'+k);touch('logadd:'+id);state.log.push({id,n,k,set:it.val,prev:isFinite(prev)?prev:null,t:itemLine(it),ts:Date.now()})}
+    done.push(itemLine(it));
+  }
+  state.log=state.log.slice(-300);
+  pend=null;cf.hidden=true;sin.value='';
+  fillInputs();changed();renderRecent();
+  say('✓ Anotado! '+done.join(' · ')+' — '+dayLbl(n)+'.');
+  msg.tabIndex=-1;bringIntoView(msg,'center');msg.focus({preventScroll:true});
+}
+function undo(id){
+  const i=state.log.findIndex(x=>x.id===id);if(i<0)return;const L=state.log[i];const cur=val(L.k);
+  if('add' in L){
+    if(!isFinite(cur)||cur<L.add-0.004){say('Esse valor foi mudado à mão no quadro do dia. Corrija direto no quadro “Gastos do dia”.',true);return}
+    const r=Math.round((cur-L.add)*100)/100;if(r>0.004)state.v[L.k]=r;else delete state.v[L.k]}
+  else{
+    if(cur!==L.set){say('Esse valor foi mudado à mão no quadro do dia. Corrija direto no quadro “Gastos do dia”.',true);return}
+    if(L.prev==null)delete state.v[L.k];else state.v[L.k]=L.prev}
+  touch('v:'+L.k);touch('logdel:'+L.id);
+  state.log.splice(i,1);fillInputs();changed();renderRecent();say('↩ Desfeito: '+L.t+' — '+dayLbl(L.n)+'.');
+}
+function renderRecent(){
+  const list=state.log.slice(-6).reverse();
+  $('recent-wrap').hidden=!list.length;
+  $('recent').innerHTML=list.map(L=>`<li><b>${esc(L.t)}</b><span>${dayLbl(L.n)}</span><button type="button" data-undo="${esc(L.id)}" aria-label="Desfazer ${esc(L.t)}, ${dayLbl(L.n)}">Desfazer</button></li>`).join('');
+}
+let armed=null,armTimer=0;
+$('recent').addEventListener('click',e=>{const b=e.target.closest('[data-undo]');if(!b)return;
+  if(armed!==b){if(armed){armed.textContent='Desfazer';armed.classList.remove('armed')}
+    armed=b;b.textContent='Tocar de novo para desfazer';b.classList.add('armed');clearTimeout(armTimer);
+    armTimer=setTimeout(()=>{if(armed){armed.textContent='Desfazer';armed.classList.remove('armed');armed=null}},5000);return}
+  clearTimeout(armTimer);armed=null;undo(b.dataset.undo)});
+function understand(text){
+  const r=SPEAK.parse(text,curDay);
+  if(!r.items.length){cf.hidden=true;say('Não achei um valor nessa frase. Escreva o que foi e quanto custou, por exemplo: “almoço 85”.',true);return}
+  r.moved=r.day!==curDay;
+  /* "dia 2", "volta" passam a ser o dia escolhido; "ontem" vale só para esta anotação */
+  if(r.moved&&!/\b(ante)?ontem\b/.test(SPEAK.strip(text)))setDay(r.day);
+  pend=r;say('');showConfirm();sin.blur();
+  setTimeout(()=>bringIntoView($('cf-ok'),'center'),60);
+}
+$('speak-form').addEventListener('submit',e=>{e.preventDefault();const t=sin.value.trim();if(!t){say('Escreva ou fale o gasto primeiro.',true);sin.focus();return}understand(t)});
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(VOICE&&SR){
+  const mb=$('mic-btn');mb.hidden=false;$('speak-hint').textContent='Toque em “Falar”, diga o gasto e espere um instante.';
+  let rec=null;
+  mb.addEventListener('click',()=>{
+    if(rec){rec.stop();return}
+    rec=new SR();rec.lang='pt-BR';rec.interimResults=false;rec.maxAlternatives=1;
+    mb.classList.add('on');mb.textContent='Ouvindo… toque para parar';say('');
+    rec.onresult=e=>{const t=e.results[0][0].transcript;sin.value=t;understand(t)};
+    rec.onerror=e=>{say(e.error==='not-allowed'?'O celular não deixou usar o microfone. Use o microfone do teclado.':'Não consegui ouvir. Tente de novo ou digite.',true)};
+    rec.onend=()=>{rec=null;mb.classList.remove('on');mb.textContent='🎤 Falar'};
+    try{rec.start()}catch(err){rec=null;mb.classList.remove('on');mb.textContent='🎤 Falar'}
+  });
+}
+renderRecent();
+document.addEventListener('focusin',e=>{if(e.target.matches&&e.target.matches('input:not([type=checkbox]),textarea'))document.body.classList.add('typing')});
+document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(!(a&&a.matches&&a.matches('input:not([type=checkbox]),textarea')))document.body.classList.remove('typing')},50));
 const sizeBtns=[...document.querySelectorAll('[data-size]')];
 function setSize(n){document.documentElement.dataset.size=n;sizeBtns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.size===n)));try{localStorage.setItem('rumo-aracaju-letra',n)}catch(e){}}
 sizeBtns.forEach(b=>b.addEventListener('click',()=>setSize(b.dataset.size)));
 let sz='1';try{sz=localStorage.getItem('rumo-aracaju-letra')||'1'}catch(e){}
 setSize(['1','2','3'].includes(sz)?sz:'1');
+
+/* ===== Prêmio da viagem: vídeo e foto liberados ao completar o caminho ===== */
+const legKeys=l=>LEGS.find(x=>x.id===l).days.flatMap(d=>d.steps.map((_,i)=>`d${d.n}s${i}`));
+const IDA_K=legKeys('ida'),VOLTA_K=legKeys('volta'),IDA_LAST=IDA_K[IDA_K.length-1],VOLTA_LAST=VOLTA_K[VOLTA_K.length-1];
+const pcv=$('pcv');let pr={v:'ida',f:'story',km:null,kmEdited:false},prOpen=false,prVisible=false,prT0=performance.now(),prRec=false,prDl=null,prReady=false;
+try{const x=JSON.parse(localStorage.getItem('rumo-aracaju-premio')||'null');if(x)Object.assign(pr,x)}catch(e){}
+const prSave=()=>{try{localStorage.setItem('rumo-aracaju-premio',JSON.stringify(pr))}catch(e){}};
+function prSeen(k){try{return localStorage.getItem('rumo-aracaju-visto-'+k)==='1'}catch(e){return true}}
+function prMarkSeen(k){try{localStorage.setItem('rumo-aracaju-visto-'+k,'1')}catch(e){}}
+function realKm(legs){let s=0,ok=0,n=0;for(const d of DAYS){if(!legs.includes(d.leg))continue;n++;const a=val(`d${d.n}_odo1`),b=val(`d${d.n}_odo2`);if(isFinite(a)&&isFinite(b)&&b>a){s+=b-a;ok++}}return{km:Math.round(s),full:ok===n,ok}}
+function kmFor(v){const r=realKm(v==='ida'?['ida']:['ida','volta']);return r.full?{km:r.km,real:true}:{km:v==='ida'?2140:4280,real:false,ok:r.ok}}
+function prDraw(t){ANIM.frame(pcv,t,{km:Number(pr.km)||0,tipo:pr.v,leg:pr.v==='ida'?'Pé na estrada · Gonçalves/MG → Aracaju/SE':'Ida e volta · Gonçalves/MG ⇄ Aracaju/SE'})}
+function prSize(){pcv.width=1080;pcv.height=pr.f==='story'?1920:1350;pcv.parentElement.classList.toggle('feed',pr.f==='feed')}
+function updatePremio(){
+  const idaOK=!!state.c[IDA_LAST],voltaOK=!!state.c[VOLTA_LAST],open=idaOK||voltaOK;
+  const keys=idaOK?VOLTA_K:IDA_K,done=keys.filter(k=>state.c[k]).length;
+  if(!open){$('premio-bar').style.width=(done/keys.length*100)+'%';$('premio-txt').textContent=`${done} de ${keys.length} etapas da ida marcadas como “Passei aqui”.`}
+  $('premio-lock').hidden=open;$('premio-open').hidden=!open;
+  const pill=$('premio-pill');pill.className='pill'+(open?' ok':'');pill.lastElementChild.textContent=open?(voltaOK?'Tudo liberado':'Vídeo da ida liberado'):'Trancado';
+  if(!voltaOK&&pr.v==='volta')pr.v='ida';
+  const vb=document.querySelector('[data-pv="volta"]');vb.disabled=!voltaOK;vb.textContent=voltaOK?'Ida e volta':'🔒 Ida e volta (libera na volta)';
+  document.querySelectorAll('[data-pv]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pv===pr.v)));
+  document.querySelectorAll('[data-pf]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pf===pr.f)));
+  const k=kmFor(pr.v);if(!pr.kmEdited)pr.km=k.km;
+  if(document.activeElement!==$('pkm'))$('pkm').value=pr.km?Number(pr.km).toLocaleString('pt-BR'):'';
+  $('pkm-hint').textContent=pr.kmEdited?'Você mudou este número à mão.':(k.real?'Calculado com os km do painel que vocês anotaram.':'Previsto do roteiro. Anote os km do painel de cada dia para o vídeo mostrar o número real.');
+  $('premio-msg').textContent=voltaOK?'🎉 Viagem completa! Os dois vídeos estão liberados.':'🎉 Vocês chegaram a Aracaju! O vídeo da ida está liberado.';
+  if(open&&!prOpen){prOpen=true;prSize();prDraw(8.4)}
+  if(!open)prOpen=false;
+  if(prReady){
+    if(idaOK&&!prSeen('ida')){prMarkSeen('ida');toast('🎉 Vocês chegaram a Aracaju! O vídeo da viagem foi liberado.')}
+    if(voltaOK&&!prSeen('volta')){prMarkSeen('volta');toast('🎉 Viagem completa! O vídeo de ida e volta foi liberado.')}
+  }
+}
+let toastTimer=0;
+function toast(t){$('toast-txt').textContent=t;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{$('toast').hidden=true},12000)}
+$('toast-go').addEventListener('click',()=>{$('toast').hidden=true;bringPremio()});
+function bringPremio(){$('premio').scrollIntoView({behavior:smooth()?'smooth':'auto',block:'start'})}
+document.querySelectorAll('[data-pv]').forEach(b=>b.addEventListener('click',()=>{if(b.disabled||prRec)return;pr.v=b.dataset.pv;if(!pr.kmEdited)pr.km=null;prSave();updatePremio();if(!prVisible)prDraw(8.4)}));
+document.querySelectorAll('[data-pf]').forEach(b=>b.addEventListener('click',()=>{if(prRec)return;pr.f=b.dataset.pf;prSave();prSize();updatePremio();if(!prVisible)prDraw(8.4)}));
+$('pkm').addEventListener('input',e=>{const d=e.target.value.replace(/\D/g,'').slice(0,6);if(d){pr.km=Number(d);pr.kmEdited=true}else{pr.kmEdited=false;pr.km=null}prSave();updatePremio();if(!prVisible)prDraw(8.4)});
+$('pkm').addEventListener('blur',()=>updatePremio());
+const prReduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if('IntersectionObserver' in window)new IntersectionObserver(es=>{for(const e of es)prVisible=e.isIntersecting&&!prReduce;if(prVisible)prT0=performance.now()}).observe(pcv);
+(function prLoop(){if(prOpen&&(prVisible||prRec))prDraw((performance.now()-prT0)/1000);requestAnimationFrame(prLoop)})();
+function psay(t,err){const m=$('pmsg');m.textContent=t;m.className='speak-msg'+(err?' err':'')}
+async function prOffer(blob,name){
+  if(prDl){try{await prDl.save({filename:name,data:blob});psay('✓ Arquivo salvo. Agora é só postar!');return}catch(e){if(e&&e.code==='declined'){psay('Tudo bem, não salvei.');return}}}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},3000);psay('✓ Arquivo enviado para a pasta de downloads do celular.');
+}
+$('ppng').addEventListener('click',async()=>{prDraw(8.4);const b=await new Promise(r=>pcv.toBlob(r,'image/png'));await prOffer(b,`viagem-aracaju-${pr.v}-${pr.f}.png`)});
+$('prec').addEventListener('click',async()=>{
+  if(prRec)return;
+  if(!pcv.captureStream||!window.MediaRecorder){psay('Este celular não grava vídeo aqui. Baixe a foto, ou peça o vídeo pronto para quem montou o guia.',true);return}
+  const type=['video/mp4;codecs=avc1','video/mp4','video/webm;codecs=vp9','video/webm'].find(x=>MediaRecorder.isTypeSupported(x));
+  if(!type){psay('Este navegador não grava vídeo. Baixe a foto.',true);return}
+  const ext=type.startsWith('video/mp4')?'mp4':'webm',rec=new MediaRecorder(pcv.captureStream(30),{mimeType:type,videoBitsPerSecond:8e6}),chunks=[];
+  rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  prRec=true;$('prec').disabled=true;prT0=performance.now();
+  const tick=setInterval(()=>{$('prec').textContent=`Gravando… ${Math.max(0,Math.ceil(ANIM.DUR-(performance.now()-prT0)/1000))} s`},250);
+  rec.start(200);await new Promise(r=>setTimeout(r,ANIM.DUR*1000+150));rec.stop();await new Promise(r=>rec.onstop=r);
+  clearInterval(tick);prRec=false;$('prec').disabled=false;$('prec').textContent='Baixar vídeo (9 segundos)';
+  await prOffer(new Blob(chunks,{type}),`viagem-aracaju-${pr.v}-${pr.f}.${ext}`);
+  if(ext==='webm')psay('Vídeo salvo em WebM. Se o Instagram não aceitar, use a foto ou peça a versão MP4.');
+});
+(async()=>{try{prDl=window.claude&&await window.claude.use('downloads')}catch(e){prDl=null}})();
+document.fonts&&document.fonts.load('900 40px Overpass').then(()=>{if(prOpen&&!prVisible)prDraw(8.4)}).catch(()=>{});
 setLeg(ui.leg);fillInputs();recompute();
+/* quem abre a página já com o caminho completo não recebe o aviso de novo */
+if(state.c[IDA_LAST])prMarkSeen('ida');if(state.c[VOLTA_LAST])prMarkSeen('volta');prReady=true;
 
 setSync('ok','Salvo neste celular');
 

@@ -1,5 +1,5 @@
 // Guarda o app no celular para funcionar sem internet na estrada.
-const CACHE = 'rumo-aracaju-v1';
+const CACHE = 'rumo-aracaju-v3';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon.svg', 'icon-192.png', 'icon-512.png',
   'icon-maskable-512.png', 'apple-touch-icon.png', 'favicon-32.png'];
 
